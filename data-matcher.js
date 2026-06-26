@@ -3,6 +3,8 @@ let f2poolData = [];
 let machinelistData = [];
 let matchedResults = [];
 let currentFilter = 'all';
+let detectedSegmentCount = 2;
+let currentSort = { column: null, direction: null }; // added: sort A-Z feature (null = default priority order)
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function () {
@@ -10,6 +12,18 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('machinelistFile').addEventListener('change', handleMachinelistFileChange);
     document.getElementById('matchBtn').addEventListener('click', matchData);
     document.getElementById('clearBtn').addEventListener('click', handleClear);
+
+    // added: sortable header listeners (sort A-Z feature)
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', function () {
+            handleSortClick(this.dataset.column);
+        });
+    });
+
+    // added: Auto Grab F2Pool (auto download per DC)
+    populateDCDropdown();
+    document.getElementById('dcSelect').addEventListener('change', handleDcSelectChange);
+    document.getElementById('dcDownloadBtn').addEventListener('click', handleDcDownload);
 });
 
 // ===== FILE INPUT HANDLERS =====
@@ -33,6 +47,79 @@ function handleMachinelistFileChange(e) {
         document.getElementById('machinelistName').textContent = 'No file selected';
     }
     updateMatchButton();
+}
+
+// ===== AUTO GRAB F2POOL (added: auto download CSV per DC) =====
+// Catatan: download native (cross-origin). Status bersifat optimis karena
+// browser menangani download; JavaScript tidak dapat memverifikasi isi file
+// tersimpan atau teralihkan ke halaman login. Compare tetap via upload manual.
+function populateDCDropdown() {
+    const select = document.getElementById('dcSelect');
+    if (!select || !window.f2poolDCLinks) return;
+
+    window.f2poolDCLinks.forEach(entry => {
+        const opt = document.createElement('option');
+        opt.value = entry.user;
+        opt.textContent = entry.dc;
+        select.appendChild(opt);
+    });
+}
+
+function handleDcSelectChange(e) {
+    const user = e.target.value;
+    const downloadBtn = document.getElementById('dcDownloadBtn');
+    const status = document.getElementById('dcStatus');
+
+    downloadBtn.disabled = !user;
+
+    if (user) {
+        const dcLabel = e.target.options[e.target.selectedIndex].textContent;
+        status.textContent = `Siap download: ${dcLabel}`;
+        status.className = 'dc-status';
+    } else {
+        status.textContent = 'Belum ada download';
+        status.className = 'dc-status';
+    }
+}
+
+function handleDcDownload() {
+    const select = document.getElementById('dcSelect');
+    const user = select.value;
+    if (!user) return;
+
+    const dcLabel = select.options[select.selectedIndex].textContent;
+    const status = document.getElementById('dcStatus');
+
+    if (!window.f2poolBaseUrl || !window.f2poolExportParams) {
+        status.textContent = '❌ Konfigurasi URL F2Pool tidak ditemukan';
+        status.className = 'dc-status error';
+        return;
+    }
+
+    const url = window.f2poolBaseUrl + '?user_name=' + user + window.f2poolExportParams;
+
+    status.textContent = `⬇️ Memulai download untuk ${dcLabel}…`;
+    status.className = 'dc-status loading';
+
+    try {
+        // Trigger download native (cross-origin): browser yang menangani.
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Status optimis setelah jeda singkat.
+        setTimeout(() => {
+            status.textContent = `✅ Download dimulai untuk ${dcLabel} — periksa folder Downloads, lalu gunakan "Pilih File CSV" untuk compare.`;
+            status.className = 'dc-status success';
+        }, 800);
+    } catch (error) {
+        status.textContent = `❌ Gagal memulai download: ${error.message}`;
+        status.className = 'dc-status error';
+    }
 }
 
 // ===== FILE PARSING =====
@@ -133,7 +220,9 @@ function rackNumberToLetter(num) {
     return String.fromCharCode(64 + num);
 }
 
-function buildWorkerFormat(storeroom, rackLetter, row, unit) {
+function buildPossibleWorkerFormats(locationId, storeroom, rackLetter, row, unit) {
+    const formats2Segment = [];
+    const formats4Segment = [];
     const rackNumber = rackLetterToNumber(rackLetter);
     
     // Special rule for unit 10: convert to (row+1)0
@@ -144,15 +233,82 @@ function buildWorkerFormat(storeroom, rackLetter, row, unit) {
         unitStr = row + unit;
     }
     
-    return `${storeroom.toLowerCase()}.${rackNumber}x${unitStr}`;
+    const storeLower = storeroom.toLowerCase();
+    
+    // Prefix variations based on F2Pool naming conventions
+    const prefixes = [
+        `gbeab${storeLower}`, // e.g., gbeabe4a
+        `gbeg${storeLower}`,  // e.g., gbege4a
+        storeLower            // fallback: e4a
+    ];
+    
+    // 1. Generate 2-segment formats (e.g., gbeabe4a.1x52)
+    prefixes.forEach(prefix => {
+        formats2Segment.push(`${prefix}.${rackNumber}x${unitStr}`);
+    });
+    
+    // 2. Generate 4-segment formats based on IP from masterData
+    if (window.masterData) {
+        // Build reverse IP map if it doesn't exist yet for fast lookups
+        if (!window.locationToIpMap) {
+            window.locationToIpMap = {};
+            for (const [ip, loc] of Object.entries(window.masterData)) {
+                window.locationToIpMap[loc.toLowerCase()] = ip;
+            }
+        }
+        
+        const ip = window.locationToIpMap[locationId.toLowerCase()];
+        if (ip) {
+            // Convert IP 10.225.1.55 to 10x225x1x55
+            const ipFormat = ip.split('.').join('x');
+            prefixes.forEach(prefix => {
+                formats4Segment.push(`${prefix}.${ipFormat}`);
+            });
+        }
+    }
+    
+    // Order formats based on the detected format of the uploaded F2Pool data
+    if (detectedSegmentCount === 4 && formats4Segment.length > 0) {
+        return [...formats4Segment, ...formats2Segment];
+    } else {
+        return [...formats2Segment, ...formats4Segment];
+    }
 }
 
 // ===== MATCHING LOGIC =====
+function detectF2PoolSegmentCount() {
+    let count4 = 0;
+    let count2 = 0;
+    
+    f2poolData.forEach(row => {
+        const workerName = row['Worker'] || '';
+        const parts = workerName.split('.');
+        if (parts.length > 1) {
+            const segmentPart = parts[1];
+            const xCount = (segmentPart.match(/x/g) || []).length;
+            if (xCount >= 3) {
+                count4++;
+            } else if (xCount === 1) {
+                count2++;
+            }
+        }
+    });
+    
+    if (count4 > count2) {
+        detectedSegmentCount = 4;
+    } else {
+        detectedSegmentCount = 2;
+    }
+    console.log(`Detected F2Pool format: ${detectedSegmentCount}-segment (4-seg: ${count4}, 2-seg: ${count2})`);
+}
+
 function matchData() {
     if (f2poolData.length === 0 || machinelistData.length === 0) {
         showMessage('❌ Please upload both F2Pool and Machinelist files', 'error');
         return;
     }
+
+    detectF2PoolSegmentCount();
 
     console.log('=== STARTING VERIFICATION ===');
     console.log('F2Pool workers available:', f2poolData.length);
@@ -193,20 +349,46 @@ function matchData() {
         const row = locParts[3]; // 2
         const unit = locParts[4]; // 2
 
-        const workerFormat = buildWorkerFormat(storeroom, rackLetter, row, unit);
+        const possibleFormats = buildPossibleWorkerFormats(locationId, storeroom, rackLetter, row, unit);
 
-        console.log(`[${machIdx}] Location: ${locationId} | Searching F2Pool for: ${workerFormat}`);
+        console.log(`[${machIdx}] Location: ${locationId} | Searching variants:`, possibleFormats);
 
-        // Search in F2Pool
-        const f2poolWorker = f2poolMap[workerFormat.toLowerCase()];
+        // Search in F2Pool across all possible formats and pick the best status
+        let bestWorker = null;
+        let matchedWorkerName = possibleFormats[0]; // fallback default
+        
+        const statusPriority = {
+            'Online': 3,
+            'Offline': 2,
+            'Dead': 1
+        };
+
+        for (const format of possibleFormats) {
+            const worker = f2poolMap[format.toLowerCase()];
+            if (worker) {
+                if (!bestWorker) {
+                    bestWorker = worker;
+                    matchedWorkerName = format;
+                } else {
+                    const currentStatus = worker['Miner Status'] || 'Unknown';
+                    const bestStatus = bestWorker['Miner Status'] || 'Unknown';
+                    if ((statusPriority[currentStatus] || 0) > (statusPriority[bestStatus] || 0)) {
+                        bestWorker = worker;
+                        matchedWorkerName = format;
+                    }
+                }
+            }
+        }
+        
+        let f2poolWorker = bestWorker;
 
         if (f2poolWorker) {
             const status = f2poolWorker['Miner Status'] || 'Unknown';
-            console.log(`✅ FOUND in F2Pool | Status: ${status}`);
+            console.log(`✅ FOUND in F2Pool: ${matchedWorkerName} | Status: ${status}`);
 
             matchedResults.push({
                 locationId: locationId,
-                worker: workerFormat,
+                worker: matchedWorkerName,
                 storeroom: storeroom,
                 rack: rackLetter,
                 row: row,
@@ -221,7 +403,7 @@ function matchData() {
 
             matchedResults.push({
                 locationId: locationId,
-                worker: workerFormat,
+                worker: matchedWorkerName + ' (NOT FOUND)',
                 storeroom: storeroom,
                 rack: rackLetter,
                 row: row,
@@ -314,8 +496,81 @@ function displayResults() {
     });
 
     currentFilter = 'all';
+    resetSort(); // added: start each verification from default priority order
     filterAndDisplayResults();
     resultsSection.style.display = 'block';
+}
+
+// ===== SORTING (added: sort A-Z feature) =====
+// 3-state cycle per column: null (default priority order) -> 'asc' (A-Z) -> 'desc' (Z-A) -> null
+function handleSortClick(column) {
+    const isSameColumn = currentSort.column === column;
+
+    let nextColumn, nextDirection;
+    if (!isSameColumn || currentSort.direction === null) {
+        // null/other column -> A-Z
+        nextColumn = column;
+        nextDirection = 'asc';
+    } else if (currentSort.direction === 'asc') {
+        // A-Z -> Z-A
+        nextColumn = column;
+        nextDirection = 'desc';
+    } else {
+        // Z-A -> back to default priority order
+        nextColumn = null;
+        nextDirection = null;
+    }
+
+    currentSort = { column: nextColumn, direction: nextDirection };
+    updateSortIndicators();
+    filterAndDisplayResults();
+}
+
+// Get the comparison value for a result row given the target column.
+// Matches what is visually displayed in each column.
+function getSortValue(result, column) {
+    if (column === 'locationId') {
+        return result.locationId || '';
+    }
+    if (column === 'worker') {
+        // Use the segment shown in the table (part after first dot)
+        const worker = result.worker || '';
+        const parts = worker.split('.');
+        return parts.length > 1 ? parts[1] : worker;
+    }
+    return '';
+}
+
+// Returns a sorted copy (original array is never mutated, preserving the
+// priority sort done in matchData()).
+function applySorting(rows) {
+    if (currentSort.column === null || currentSort.direction === null) {
+        return rows; // default priority order (unchanged behavior)
+    }
+    const dir = currentSort.direction === 'asc' ? 1 : -1;
+    return [...rows].sort((a, b) => {
+        const va = getSortValue(a, currentSort.column);
+        const vb = getSortValue(b, currentSort.column);
+        return va.localeCompare(vb, undefined, { numeric: true, sensitivity: 'base' }) * dir;
+    });
+}
+
+function updateSortIndicators() {
+    document.querySelectorAll('th.sortable').forEach(th => {
+        const indicator = th.querySelector('.sort-indicator');
+        th.classList.remove('active');
+        if (indicator) indicator.textContent = '';
+
+        if (th.dataset.column === currentSort.column && currentSort.direction) {
+            th.classList.add('active');
+            if (indicator) indicator.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
+        }
+    });
+}
+
+function resetSort() {
+    currentSort = { column: null, direction: null };
+    updateSortIndicators();
 }
 
 function filterAndDisplayResults() {
@@ -336,6 +591,9 @@ function filterAndDisplayResults() {
         filtered = matchedResults.filter(r => !r.found);
     }
 
+    // added: apply A-Z/Z-A sort on top of the active filter (ignores priority order when active)
+    filtered = applySorting(filtered);
+
     resultsBody.innerHTML = '';
 
     if (filtered.length === 0) {
@@ -345,7 +603,7 @@ function filterAndDisplayResults() {
     }
 
     resultsTable.style.display = 'table';
-    noData.style.display = 'block';
+    noData.style.display = 'none';
 
     filtered.forEach(result => {
         const row = resultsBody.insertRow();
@@ -364,14 +622,16 @@ function filterAndDisplayResults() {
             priorityBadge = '<span class="priority-badge">🔴 DEAD</span>';
         }
 
+        let displayWorker = result.worker;
+        const parts = displayWorker.split('.');
+        if (parts.length > 1) {
+            displayWorker = parts[1];
+        }
+
         row.innerHTML = `
             <td>${result.locationId}</td>
-            <td><strong>${result.worker}</strong></td>
-            <td>${result.rack}</td>
-            <td>${result.row}</td>
-            <td>${result.unit}</td>
+            <td><strong>${displayWorker}</strong></td>
             <td>${statusBadge} ${priorityBadge}</td>
-            <td>${result.machineSerial}</td>
         `;
     });
 }
@@ -402,6 +662,12 @@ function handleClear() {
     f2poolData = [];
     machinelistData = [];
     matchedResults = [];
+    resetSort(); // added: clear sort state on reset
+    // added: reset Auto Grab state on reset
+    document.getElementById('dcSelect').value = '';
+    document.getElementById('dcDownloadBtn').disabled = true;
+    document.getElementById('dcStatus').textContent = 'Belum ada download';
+    document.getElementById('dcStatus').className = 'dc-status';
     updateMatchButton();
     showMessage('🔄 All data cleared', 'success');
 }

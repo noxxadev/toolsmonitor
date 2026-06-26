@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Matcher - DataAnalyzer</title>
+    <title>Pool vs Dashboard</title>
     <link rel="stylesheet" href="data-matcher.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -17,7 +17,7 @@
             </a>
             <div class="nav-title">
                 <i class="fas fa-link"></i>
-                <span>Data Matcher</span>
+                <span>Pool Data Matcher</span>
             </div>
             <div class="nav-actions">
                 <a href="index.html" class="nav-link">
@@ -32,7 +32,7 @@
         <!-- Header -->
         <div class="analyzer-header">
             <h1><i class="fas fa-link"></i> F2Pool vs Machinelist Matcher</h1>
-            <p>Verifikasi kecocokan data antara F2Pool workers dan lokasi mesin di Machinelist</p>
+            <p>Verifikasi machinelist dengan data f2pool</p>
         </div>
 
         <!-- Message Alert -->
@@ -43,6 +43,18 @@
             <div class="upload-box">
                 <h3><i class="fas fa-water"></i> F2Pool Data</h3>
                 <p>Upload file CSV F2Pool (btc-workers)</p>
+
+                <!-- added: Auto Grab F2Pool (auto download per DC) -->
+                <select id="dcSelect" class="dc-select">
+                    <option value="">— Pilih DC —</option>
+                </select>
+                <button id="dcDownloadBtn" class="dc-download-btn" disabled>
+                    <i class="fas fa-download"></i> Download CSV
+                </button>
+                <span id="dcStatus" class="dc-status">Belum ada download</span>
+
+                <div class="dc-divider">— upload file yang di download —</div>
+
                 <label class="file-label" for="f2poolFile">
                     <i class="fas fa-cloud-upload-alt"></i> Pilih File CSV
                 </label>
@@ -80,16 +92,12 @@
             <div class="filter-section" id="filterSection"></div>
 
             <!-- Results Table -->
-            <table class="results-table" id="resultsTable">
+            <table class="results-table" id="resultsTable" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Location ID</th>
-                        <th>Worker (F2Pool)</th>
-                        <th>Rack</th>
-                        <th>Row</th>
-                        <th>Unit</th>
+                        <th class="sortable" data-column="locationId">Location ID <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="worker">Worker (F2Pool) <span class="sort-indicator"></span></th>
                         <th>Status</th>
-                        <th>Serial</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody"></tbody>
@@ -103,8 +111,14 @@
     </div>
 
     <!-- Load XLSX library for Excel support -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.18.5/package/dist/xlsx.full.min.js"></script>
     
+    <!-- Load Master Data for IP logic -->
+    <script src="master-data.js"></script>
+
+    <!-- Load F2Pool DC Links for Auto Grab feature -->
+    <script src="f2pool-dc-links.js"></script>
+
     <!-- Load Data Matcher logic -->
     <script src="data-matcher.js"></script>
 </body>
