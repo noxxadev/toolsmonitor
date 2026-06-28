@@ -62,6 +62,7 @@ let currentData = {
     'sudah-turun': [],
     'dhcp': []
 };
+let selectedLines = new Set(); // Track which Line filter buttons are active
 
 // Initialize reverse lookup from master-data.js
 function initMasterData() {
@@ -82,6 +83,7 @@ function initMasterData() {
 document.addEventListener('DOMContentLoaded', () => {
     initMasterData();
     setupTabEventListeners();
+    setupLineFilterListeners();
 });
 
 // Setup event listeners for tabs
@@ -111,6 +113,41 @@ function switchTab(tabId) {
 
     // Render content of the active tab
     renderActiveTab();
+}
+
+// Setup event listeners for line filter buttons
+function setupLineFilterListeners() {
+    const lineButtons = document.querySelectorAll('.line-filter-btn');
+    lineButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const line = btn.getAttribute('data-line');
+            if (selectedLines.has(line)) {
+                selectedLines.delete(line);
+                btn.classList.remove('active');
+            } else {
+                selectedLines.add(line);
+                btn.classList.add('active');
+            }
+            // Re-render active tab with new filter
+            renderActiveTab();
+        });
+    });
+}
+
+// Extract line letter from location_id (e.g. "GBE.A9" -> "A")
+function extractLineLetter(locationId) {
+    if (!locationId) return null;
+    const match = locationId.match(/\.([A-Fa-f])/);
+    return match ? match[1].toUpperCase() : null;
+}
+
+// Filter data based on selected lines
+function filterBySelectedLines(data) {
+    if (selectedLines.size === 0) return data; // No filter active, show all
+    return data.filter(item => {
+        const lineLetter = extractLineLetter(item.location);
+        return lineLetter && selectedLines.has(lineLetter);
+    });
 }
 
 // Handle Excel Upload
@@ -238,6 +275,8 @@ function renderActiveTab() {
     
     const data = currentData[currentTab] || [];
     
+    // Apply line filter
+    const filteredData = filterBySelectedLines(data);
     // Tab descriptions
     const descriptions = {
         'harus-cek': 'IP ini offline, tetapi lokasinya masih terdaftar aktif di Excel.',
@@ -258,11 +297,11 @@ function renderActiveTab() {
     desc.textContent = descriptions[currentTab];
     header.appendChild(desc);
     
-    if (data.length > 0) {
+    if (filteredData.length > 0) {
         const copyListBtn = document.createElement('button');
         copyListBtn.className = 'btn-copy-small';
         copyListBtn.innerHTML = '<i class="fas fa-copy"></i> Copy IP List';
-        copyListBtn.addEventListener('click', () => copyIpList(data, copyListBtn));
+        copyListBtn.addEventListener('click', () => copyIpList(filteredData, copyListBtn));
         header.appendChild(copyListBtn);
     }
     
@@ -272,11 +311,14 @@ function renderActiveTab() {
     const body = document.createElement('div');
     body.className = 'tab-pane-body';
     
-    if (data.length === 0) {
+    if (filteredData.length === 0) {
+        const emptyMsg = (selectedLines.size > 0 && data.length > 0)
+            ? 'Tidak ada IP yang cocok dengan filter Line yang dipilih.'
+            : 'Tidak ada IP dalam kelompok ini.';
         body.innerHTML = `
             <div class="tab-empty-state">
                 <i class="fas fa-info-circle"></i>
-                <p>Tidak ada IP dalam kelompok ini.</p>
+                <p>${emptyMsg}</p>
             </div>
         `;
     } else {
@@ -299,7 +341,7 @@ function renderActiveTab() {
         headerRow.appendChild(thAction);
         
         const tbody = table.createTBody();
-        data.forEach(item => {
+        filteredData.forEach(item => {
             const tr = tbody.insertRow();
             
             const cellIp = tr.insertCell();
@@ -351,7 +393,7 @@ function renderActiveTab() {
 
 // Copy IP List function
 function copyIpList(data, button) {
-    const ipList = data.map(item => item.ip).join('\n');
+    const ipList = data.map(item => `${item.ip} - ${item.location}`).join('\n');
     navigator.clipboard.writeText(ipList).then(() => {
         const originalHTML = button.innerHTML;
         button.innerHTML = '<i class="fas fa-check"></i> Copied!';

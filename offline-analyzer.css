@@ -207,21 +207,30 @@ body::before {
     margin: 0 auto;
 }
 
-/* Step Section Layout */
-.step-section {
+/* Main Unified Input Card */
+.main-input-card {
     background: var(--bg-card);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-card);
-    border-left: 4px solid var(--phosphor);
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow);
-    transition: border-color 0.18s steps(4, end);
 }
 
-.step-section:hover {
-    border-color: rgba(0, 255, 157, 0.4);
-    border-left-color: var(--phosphor);
+.main-input-card .card-section:last-child {
+    margin-bottom: 0;
+}
+
+.card-divider {
+    border: none;
+    border-top: 1px solid var(--border-card);
+    margin: 1.5rem 0;
+}
+
+.main-input-card .upload-desc {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
 }
 
 .step-header {
@@ -514,16 +523,59 @@ body::before {
 
 .controls-panel {
     display: none;
+    width: 100%;
 }
 
 /* Results & Tabs */
 .results-header-container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-bottom: 0;
+}
+
+/* Top row: Total Input + Line Filter Buttons */
+.results-top-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.line-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: flex-end;
+    gap: 0.35rem;
+}
+
+.line-filter-btn {
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--border-card);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.line-filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.line-filter-btn.active {
+    background: var(--phosphor);
+    color: var(--dark);
+    border-color: var(--phosphor);
+    box-shadow: 0 0 12px var(--phosphor-glow);
+    font-weight: 700;
 }
 
 .total-input-badge {
@@ -624,10 +676,11 @@ body::before {
     margin-bottom: 3rem;
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 
 /* Category specific borders for the tab panel */
-.tab-panel-container.harus-cek {
+/*.tab-panel-container.harus-cek {
     border-left: 4px solid #ef4444;
 }
 .tab-panel-container.sudah-turun {
@@ -635,7 +688,7 @@ body::before {
 }
 .tab-panel-container.dhcp {
     border-left: 4px solid #ff9f43;
-}
+}*/
 
 /* Tab Pane content with fade animation */
 .tab-pane {
@@ -697,7 +750,7 @@ body::before {
 .tab-table td {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--border-card);
-    color: var(--text-muted);
+    
 }
 
 .tab-table tr:last-child td {
@@ -735,28 +788,28 @@ body::before {
 
 /* General Empty State (No Data Initialized) */
 .empty-state {
-    padding: 3.5rem 2rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     color: var(--text-muted);
 }
 
 .empty-state i {
-    font-size: 2.2rem;
+    font-size: 1.5rem;
     color: var(--phosphor);
-    margin-bottom: 1.25rem;
-    filter: drop-shadow(0 0 10px var(--phosphor-glow));
+    margin-bottom: 0.75rem;
+    filter: drop-shadow(0 0 8px var(--phosphor-glow));
 }
 
 .empty-state h3 {
     color: var(--text-main);
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 
 .empty-state p {
-    font-size: 1rem;
-    max-width: 500px;
+    font-size: 0.85rem;
+    max-width: 420px;
     margin: 0 auto;
 }
 
@@ -811,10 +864,24 @@ body::before {
     }
     
     .results-header-container {
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .results-top-row {
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        gap: 0.75rem;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .line-filter-buttons {
+        justify-content: center;
+    }
+
+    .line-filter-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
     }
     
     .analyzer-tabs {

@@ -32,42 +32,42 @@
             <p>Analisis data offline dari MinerPlus dengan filter IP per Line</p>
         </div>
 
-        <!-- Step 1: Input IP Offline -->
-        <div class="step-section">
-            <div class="step-header">
-                <span class="step-number">1</span>
-                <h3>Masukkan IP Offline</h3>
-            </div>
-            <div class="filter-ip-section">
+        <!-- Input & Upload Section -->
+        <div class="main-input-card">
+            <!-- Input IP Offline -->
+            <div class="card-section">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h3>Masukkan IP Offline</h3>
+                </div>
                 <div class="input-group">
-                    <label for="offlineIpInput"><i class="fas fa-server"></i> Daftar IP Offline (satu per
-                        baris):</label>
+                    <label for="offlineIpInput"><i class="fas fa-server"></i> Daftar IP Offline (satu per baris):</label>
                     <textarea id="offlineIpInput" placeholder="Contoh:
 10.64.2.15
 10.69.3.106"></textarea>
                     <small>Masukkan IP offline yang ingin dicek status lokasinya.</small>
                 </div>
             </div>
-        </div>
 
-        <!-- Step 2: Upload File Excel -->
-        <div class="step-section">
-            <div class="step-header">
-                <span class="step-number">2</span>
-                <h3>Upload Data Excel</h3>
-            </div>
-            <div class="step-content">
-                <p>Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom <code>location_id</code>.</p>
-            </div>
-            <div class="compact-upload-area" id="fileUploadArea">
-                <div class="upload-content">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <div class="upload-text">
-                        <span class="upload-title">Klik untuk memilih file atau seret ke sini</span>
-                        <span class="upload-subtitle">Format .xls, .xlsx</span>
-                    </div>
+            <div class="card-divider"></div>
+
+            <!-- Upload File Excel -->
+            <div class="card-section">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h3>Upload Data Excel</h3>
                 </div>
-                <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
+                <p class="upload-desc">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom <code>location_id</code>.</p>
+                <div class="compact-upload-area" id="fileUploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-text">
+                            <span class="upload-title">Klik untuk memilih file atau seret ke sini</span>
+                            <span class="upload-subtitle">Format .xls, .xlsx</span>
+                        </div>
+                    </div>
+                    <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
+                </div>
             </div>
         </div>
 
@@ -80,8 +80,18 @@
         <!-- Controls & Results Summary -->
         <div id="controls" class="controls-panel">
             <div class="results-header-container">
-                <div class="total-input-badge">
-                    <i class="fas fa-list"></i> Total Input: <strong id="totalCount">0</strong> IP
+                <div class="results-top-row">
+                    <div class="total-input-badge">
+                        <i class="fas fa-list"></i> Total Input: <strong id="totalCount">0</strong> IP
+                    </div>
+                    <div class="line-filter-buttons" id="lineFilterButtons">
+                        <button type="button" class="line-filter-btn" data-line="A">Line A</button>
+                        <button type="button" class="line-filter-btn" data-line="B">Line B</button>
+                        <button type="button" class="line-filter-btn" data-line="C">Line C</button>
+                        <button type="button" class="line-filter-btn" data-line="D">Line D</button>
+                        <button type="button" class="line-filter-btn" data-line="E">Line E</button>
+                        <button type="button" class="line-filter-btn" data-line="F">Line F</button>
+                    </div>
                 </div>
                 <div class="analyzer-tabs">
                     <button type="button" class="tab-btn active" data-tab="harus-cek" id="tabHarusCek">
