@@ -672,8 +672,13 @@ function getSortValue(result, column) {
     if (column === 'dc') {
         return result.dc || '';
     }
-    if (column === 'ip') {
-        return result.ip || '';
+    if (column === 'locationId') {
+        return result.locationId || '';
+    }
+    if (column === 'worker') {
+        const worker = result.worker || '';
+        const parts = worker.split('.');
+        return parts.length > 1 ? parts[1] : worker;
     }
     return '';
 }
@@ -739,15 +744,32 @@ function filterAndDisplayResults() {
 
     filtered.forEach(result => {
         const row = resultsBody.insertRow();
+        if (result.priority) {
+            row.classList.add('priority');
+        }
 
-        // Lookup IP dari master data berdasarkan locationId
-        const ip = (window.locationToIpMap && result.locationId)
-            ? (window.locationToIpMap[result.locationId.toLowerCase()] || '-')
-            : '-';
+        let statusClass = result.status.toLowerCase().replace(' ', '-');
+        let statusBadge = `<span class="status-badge status-${statusClass}">${result.status}</span>`;
+        let priorityBadge = '';
+
+        if (!result.found) {
+            statusBadge = `<span class="status-badge" style="background: #f8d7da; color: #721c24;">NOT FOUND</span>`;
+            priorityBadge = '<span class="priority-badge">🔴 MISSING</span>';
+        } else if (result.priority) {
+            priorityBadge = '<span class="priority-badge">🔴 DEAD</span>';
+        }
+
+        let displayWorker = result.worker;
+        const parts = displayWorker.split('.');
+        if (parts.length > 1) {
+            displayWorker = parts[1];
+        }
 
         row.innerHTML = `
             <td><strong>${result.dc}</strong></td>
-            <td>${ip}</td>
+            <td>${result.locationId}</td>
+            <td><strong>${displayWorker}</strong></td>
+            <td>${statusBadge} ${priorityBadge}</td>
         `;
     });
 }

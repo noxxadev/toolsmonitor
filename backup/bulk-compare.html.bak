@@ -132,7 +132,9 @@
                 <thead>
                     <tr>
                         <th class="sortable" data-column="dc">DC <span class="sort-indicator"></span></th>
-                        <th class="sortable" data-column="ip">IP <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="locationId">Location ID <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="worker">Worker (F2Pool) <span class="sort-indicator"></span></th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody"></tbody>
