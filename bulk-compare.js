@@ -339,7 +339,7 @@ function buildPossibleWorkerFormats(locationId, storeroom, rackLetter, row, unit
     // Prefix variations based on F2Pool naming conventions
     const prefixes = [
         `gbeab${storeLower}`, // e.g., gbeabe4a
-        `gbeg${storeLower}`,  // e.g., gbege4a
+        `gbegb${storeLower}`,  // e.g., gbegbe4a
         storeLower            // fallback: e4a
     ];
 
