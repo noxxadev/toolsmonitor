@@ -445,6 +445,7 @@ body::before {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
 }
 
 .result-table th {
@@ -493,6 +494,7 @@ body::before {
     color: var(--text-muted);
     vertical-align: middle;
     font-size: 0.95rem;
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
 }
 
 .result-table tbody tr:hover {
