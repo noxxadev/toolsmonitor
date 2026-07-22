@@ -5,6 +5,8 @@ let machineListEntries = [];
 let machineListIPs = [];
 let validationResults = [];
 let currentFilter = 'all';
+let currentSortColumn = null;
+let currentSortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof window.masterData !== 'undefined') {
@@ -175,12 +177,72 @@ function setFilter(filter) {
 }
 
 function displayResults() {
+    // Filter results first
+    let filteredResults = validationResults.filter(result => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'true') return result.isValid;
+        if (currentFilter === 'false') return !result.isValid;
+        return true;
+    });
+    
+    // Sort results if a column is selected
+    if (currentSortColumn) {
+        filteredResults.sort((a, b) => {
+            let valueA, valueB;
+            
+            switch(currentSortColumn) {
+                case 'ip':
+                    valueA = a.ip;
+                    valueB = b.ip;
+                    break;
+                case 'locationId':
+                    valueA = a.locationId;
+                    valueB = b.locationId;
+                    break;
+                case 'minerPlus':
+                    valueA = a.inMinerPlus ? 1 : 0;
+                    valueB = b.inMinerPlus ? 1 : 0;
+                    break;
+                case 'machineList':
+                    valueA = a.inMachineList ? 1 : 0;
+                    valueB = b.inMachineList ? 1 : 0;
+                    break;
+                case 'status':
+                    valueA = a.isValid ? 1 : 0;
+                    valueB = b.isValid ? 1 : 0;
+                    break;
+                default:
+                    valueA = a.ip;
+                    valueB = b.ip;
+            }
+            
+            // Compare values
+            let comparison = 0;
+            if (typeof valueA === 'string' && typeof valueB === 'string') {
+                comparison = valueA.localeCompare(valueB, undefined, {numeric: true});
+            } else if (typeof valueA === 'number' && typeof valueB === 'number') {
+                comparison = valueA - valueB;
+            } else {
+                valueA = String(valueA);
+                valueB = String(valueB);
+                comparison = valueA.localeCompare(valueB, undefined, {numeric: true});
+            }
+            
+            return currentSortDirection === 'asc' ? comparison : -comparison;
+        });
+    }
+    
     let detailedHTML = '<table class="result-table">';
-    detailedHTML += '<tr><th>IP Address</th><th>Location ID</th><th>MinerPlus</th><th>Machine List</th><th>Status</th></tr>';
+    detailedHTML += `<tr>
+        <th data-column="ip" onclick="handleSort('ip')">IP Address <span class="sort-icon"></span></th>
+        <th data-column="locationId" onclick="handleSort('locationId')">Location ID <span class="sort-icon"></span></th>
+        <th data-column="minerPlus" onclick="handleSort('minerPlus')">MinerPlus <span class="sort-icon"></span></th>
+        <th data-column="machineList" onclick="handleSort('machineList')">Machine List <span class="sort-icon"></span></th>
+        <th data-column="status" onclick="handleSort('status')">Status <span class="sort-icon"></span></th>
+    </tr>`;
     
     let trueCount = 0;
     let falseCount = 0;
-    let displayedCount = 0;
     
     validationResults.forEach(result => {
         if (result.isValid) {
@@ -188,20 +250,16 @@ function displayResults() {
         } else {
             falseCount++;
         }
-        
-        if (currentFilter === 'all' || 
-            (currentFilter === 'true' && result.isValid) ||
-            (currentFilter === 'false' && !result.isValid)) {
-            
-            detailedHTML += `<tr class="${result.isValid ? 'status-true' : 'status-false'}">`;
-            detailedHTML += `<td><strong>${result.ip}</strong></td>`;
-            detailedHTML += `<td>${result.locationId}</td>`;
-            detailedHTML += `<td class="${result.inMinerPlus ? 'status-ada' : 'status-tidak-ada'}">${result.inMinerPlus ? 'ADA' : 'TIDAK ADA'}</td>`;
-            detailedHTML += `<td class="${result.inMachineList ? 'status-ada' : 'status-tidak-ada'}">${result.inMachineList ? 'ADA' : 'TIDAK ADA'}</td>`;
-            detailedHTML += `<td><strong>${result.isValid ? 'TRUE' : 'FALSE'}</strong></td>`;
-            detailedHTML += '</tr>';
-            displayedCount++;
-        }
+    });
+    
+    filteredResults.forEach(result => {
+        detailedHTML += `<tr class="${result.isValid ? 'status-true' : 'status-false'}">`;
+        detailedHTML += `<td><strong>${result.ip}</strong></td>`;
+        detailedHTML += `<td>${result.locationId}</td>`;
+        detailedHTML += `<td class="${result.inMinerPlus ? 'status-ada' : 'status-tidak-ada'}">${result.inMinerPlus ? 'ADA' : 'TIDAK ADA'}</td>`;
+        detailedHTML += `<td class="${result.inMachineList ? 'status-ada' : 'status-tidak-ada'}">${result.inMachineList ? 'ADA' : 'TIDAK ADA'}</td>`;
+        detailedHTML += `<td><strong>${result.isValid ? 'TRUE' : 'FALSE'}</strong></td>`;
+        detailedHTML += '</tr>';
     });
     
     detailedHTML += '</table>';
@@ -212,7 +270,7 @@ function displayResults() {
                 <i class="fas fa-check-circle"></i> Tidak ada data untuk dibandingkan.
             </div>
         `;
-    } else if (displayedCount === 0) {
+    } else if (filteredResults.length === 0) {
         document.getElementById('detailedResults').innerHTML = `
             <div style="padding: 20px; text-align: center; color: #856404; font-weight: bold; border: 1px solid #ffeaa7; background-color: #fff3cd; border-radius: 8px;">
                 <i class="fas fa-info-circle"></i> Tidak ada data dengan status ini.
@@ -220,10 +278,30 @@ function displayResults() {
         `;
     } else {
         document.getElementById('detailedResults').innerHTML = detailedHTML;
+        updateSortIndicators();
     }
     
     document.getElementById('summaryText').textContent = 
         `TRUE: ${trueCount}, FALSE: ${falseCount}, Total: ${validationResults.length}`;
+}
+
+function handleSort(column) {
+    if (currentSortColumn === column) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSortColumn = column;
+        currentSortDirection = 'asc';
+    }
+    displayResults();
+}
+
+function updateSortIndicators() {
+    document.querySelectorAll('.result-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.column === currentSortColumn) {
+            th.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+    });
 }
 
 document.getElementById('validateBtn').addEventListener('click', function() {
