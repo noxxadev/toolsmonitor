@@ -5,30 +5,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP & Location ID Validator - DataAnalyzer</title>
+    <link rel="stylesheet" href="shared-ui.css">
     <link rel="stylesheet" href="iplocationvalidator.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="analyzer-nav">
-        <div class="nav-container">
-            <a href="index.html" class="back-button">
-                <i class="fas fa-arrow-left"></i>
-                Kembali ke Beranda
-            </a>
-            
-            <div class="nav-actions">
-                <a href="index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    Beranda
-                </a>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mark">
+                    <div class="logo-gradient"></div>
+                </div>
+                <span class="logo-wordmark">DataAnalyzer</span>
             </div>
-        </div>
-    </nav>
-
-    <div class="analyzer-container">
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-label">OVERVIEW</span>
+                    <a href="index.html" class="nav-item">
+                        <i class="fas fa-home nav-icon"></i>
+                        <span>Beranda</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <span class="nav-section-label">TOOLS</span>
+                    <a href="excel-analyzer.html" class="nav-item">
+                        <i class="fas fa-file-excel nav-icon"></i>
+                        <span>Excel Analyzer</span>
+                    </a>
+                    <a href="offline-analyzer.html" class="nav-item">
+                        <i class="fas fa-database nav-icon"></i>
+                        <span>Offline Analyzer</span>
+                    </a>
+                    <a href="iplocationvalidator.html" class="nav-item active">
+                        <i class="fas fa-check-circle nav-icon"></i>
+                        <span>Miner Vs Dashboard</span>
+                    </a>
+                    <a href="data-matcher.html" class="nav-item">
+                        <i class="fas fa-link nav-icon"></i>
+                        <span>Pool vs Dashboard</span>
+                    </a>
+                    <a href="bulk-compare.html" class="nav-item">
+                        <i class="fas fa-layer-group nav-icon"></i>
+                        <span>Bulk Compare</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="favicon.ico" alt="User" class="avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="collapse-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <div class="navbar-left">
+                    <h1 class="page-title">Miner Vs Dashboard</h1>
+                </div>
+                <div class="navbar-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Cari...">
+                        <span class="search-shortcut">⌘F</span>
+                    </div>
+                    <button class="icon-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="icon-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="navbar-divider"></div>
+                    <div class="user-block">
+                        <img src="favicon.ico" alt="User" class="user-avatar">
+                        <div class="user-details">
+                            <span class="user-display-name">Admin</span>
+                            <span class="user-email">admin@company.com</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Page Content -->
+            <div class="dashboard-body">
         <div class="analyzer-header">
             <h1><i class="fas fa-check-circle"></i> Miner Vs Dashboard</h1>
             <p>Validasi kesesuaian IP MinerPlus dengan Location ID Machine List</p>
@@ -102,17 +176,15 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer-bottom">
-        
+            </div>
+        </main>
     </div>
 
     <!-- XLSX Library & Mappings -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
     <script src="master-data.js"></script>
     <script src="script.js"></script>
+    <script src="shared-ui.js"></script>
     <script src="iplocationvalidator.js"></script>
 </body>
 
