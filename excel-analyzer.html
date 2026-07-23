@@ -11,11 +11,6 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <style>
     /* Custom styles for Excel Analyzer tool */
-    .tool-content {
-      padding: var(--spacing-28) var(--spacing-32);
-      max-width: 1400px;
-    }
-    
     .tool-header {
       margin-bottom: var(--spacing-24);
     }
@@ -37,10 +32,17 @@
       max-width: 600px;
     }
     
-    .file-upload-area {
+    .tool-card {
       background: var(--card-surface);
-      border: 2px dashed var(--border-color);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    
+    .file-upload-area {
+      background: var(--page-bg);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
       padding: var(--spacing-32);
       text-align: center;
       transition: all 0.2s ease;
@@ -282,7 +284,7 @@
                 <div class="logo-mark">
                     <div class="logo-gradient"></div>
                 </div>
-                <span class="logo-wordmark">Dashboard</span>
+                <span class="logo-wordmark">DataAnalyzer</span>
             </div>
 
             <nav class="sidebar-nav">
@@ -396,7 +398,7 @@
             </header>
 
             <!-- Tool Content -->
-            <div class="tool-content">
+            <div class="dashboard-body">
                 <div class="tool-header">
                     <p class="tool-description">Unggah file Excel untuk memeriksa kesesuaian antara Logical Zone dan Sub-account</p>
                 </div>
