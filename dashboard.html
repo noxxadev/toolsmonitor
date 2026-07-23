@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Icon Rail (Optional) -->
+        <aside class="icon-rail">
+            <div class="app-switcher">
+                <button class="app-icon active" title="Dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                </button>
+                <button class="app-icon" title="Analytics">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                    </svg>
+                </button>
+                <button class="app-icon" title="Projects">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                    </svg>
+                </button>
+                <button class="app-icon" title="Messages">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                    </svg>
+                </button>
+                <button class="app-icon" title="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mark">
+                    <div class="logo-gradient"></div>
+                </div>
+                <span class="logo-wordmark">Dashboard</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-label">Overview</span>
+                    <a href="#" class="nav-item active">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 20V10M12 20V4M6 20v-6"/>
+                        </svg>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-label">Marketing</span>
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+                            <circle cx="12" cy="9" r="1"/>
+                        </svg>
+                        <span>Campaigns</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                        <span>Audience</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-label">Payments</span>
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        <span>Transactions</span>
+                        <span class="nav-badge">12</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                        </svg>
+                        <span>Revenue</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-label">System</span>
+                    <div class="nav-item has-submenu" onclick="toggleSubmenu(this)">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                        </svg>
+                        <span>Settings</span>
+                        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="nav-submenu">
+                        <a href="#" class="nav-subitem">General</a>
+                        <a href="#" class="nav-subitem">Security</a>
+                        <a href="#" class="nav-subitem">Integrations</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%235A6ACF'/%3E%3Ctext x='20' y='26' text-anchor='middle' fill='white' font-size='18' font-weight='700'%3EJD%3C/text%3E%3C/svg%3E" alt="User" class="avatar">
+                    <div class="user-info">
+                        <span class="user-name">John Doe</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="collapse-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Navbar -->
+            <header class="navbar">
+                <div class="navbar-left">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                </div>
+                <div class="navbar-right">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search..." class="search-input">
+                        <kbd class="search-shortcut">⌘F</kbd>
+                    </div>
+                    <button class="icon-btn" title="Messages">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="icon-btn" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="icon-btn" title="Settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                        </svg>
+                    </button>
+                    <div class="navbar-divider"></div>
+                    <div class="user-block">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%235A6ACF'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='16' font-weight='700'%3EJD%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar">
+                        <div class="user-details">
+                            <span class="user-display-name">John Doe</span>
+                            <span class="user-email">john@example.com</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-body">
+                <!-- Hero Banner Row -->
+                <div class="hero-row">
+                    <div class="hero-banner">
+                        <div class="hero-decoration">
+                            <svg width="120" height="120" viewBox="0 0 120 120" fill="rgba(255,255,255,0.1)">
+                                <circle cx="60" cy="60" r="40"/>
+                                <circle cx="60" cy="60" r="25"/>
+                            </svg>
+                        </div>
+                        <span class="hero-eyebrow">🎉 New Feature</span>
+                        <h2 class="hero-headline">Advanced Analytics Now Available</h2>
+                        <p class="hero-description">Get deeper insights with our new real-time analytics dashboard featuring custom reports and AI-powered predictions.</p>
+                        <button class="hero-cta">
+                            <span>Explore Features</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="hero-stat-widget">
+                        <div class="stat-widget-header">
+                            <span class="stat-widget-label">Monthly Goal</span>
+                            <span class="stat-widget-value">88%</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg viewBox="0 0 120 120">
+                                <circle class="progress-bg" cx="60" cy="60" r="52"/>
+                                <circle class="progress-bar" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="38.81"/>
+                            </svg>
+                            <div class="progress-center">
+                                <span class="progress-percentage">88%</span>
+                                <span class="progress-label">Reached</span>
+                            </div>
+                        </div>
+                        <div class="stat-widget-footer">
+                            <span class="stat-widget-sublabel">$88,000 of $100,000 goal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metric Cards Row -->
+                <div class="metrics-grid">
+                    <!-- Gradient Hero Card -->
+                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);">
+                        <button class="card-view-more">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                        <div class="metric-icon-wrapper">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="metric-value">$124,592</div>
+                        <div class="metric-label">Total Revenue</div>
+                        <div class="metric-trend">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                <polyline points="17 6 23 6 23 12"/>
+                            </svg>
+                            <span>↑ 23.5% from last month</span>
+                        </div>
+                    </div>
+
+                    <!-- Flat Data Card 1 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #E7FAF0;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#027A48" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge success">↑ 12.3%</span>
+                        </div>
+                        <div class="metric-value flat">2,847</div>
+                        <div class="metric-label flat">New Customers</div>
+                        <svg class="sparkline" viewBox="0 0 80 30" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="sparkGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#12B76A;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#12B76A;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M0,25 Q10,20 20,22 T40,15 T60,10 T80,5 L80,30 L0,30 Z" fill="url(#sparkGradient1)"/>
+                            <path d="M0,25 Q10,20 20,22 T40,15 T60,10 T80,5" fill="none" stroke="#12B76A" stroke-width="2"/>
+                        </svg>
+                    </div>
+
+                    <!-- Flat Data Card 2 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #FFFAEB;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+                                    <circle cx="12" cy="9" r="1"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge warning">↓ 3.2%</span>
+                        </div>
+                        <div class="metric-value flat">48.2%</div>
+                        <div class="metric-label flat">Conversion Rate</div>
+                        <div class="comparison-text">
+                            <span style="color: #F04438;">↓ 3.2%</span> from last month
+                        </div>
+                    </div>
+
+                    <!-- Flat Data Card 3 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #EEF0FF;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A6ACF" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge success">↑ 8.7%</span>
+                        </div>
+                        <div class="metric-value flat">1,429</div>
+                        <div class="metric-label flat">Transactions</div>
+                        <svg class="sparkline" viewBox="0 0 80 30" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="sparkGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#5A6ACF;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#5A6ACF;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M0,20 Q15,25 25,18 T45,12 T65,15 T80,8 L80,30 L0,30 Z" fill="url(#sparkGradient2)"/>
+                            <path d="M0,20 Q15,25 25,18 T45,12 T65,15 T80,8" fill="none" stroke="#5A6ACF" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-grid">
+                    <!-- Bar Chart Card -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Revenue vs Gross Margin</h3>
+                                <p class="card-subtitle">Monthly comparison for current year</p>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #5A6ACF;"></span>
+                                    <span>Revenue</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #F59E0B;"></span>
+                                    <span>Gross Margin</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="barChart">
+                            <!-- Bar chart will be rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Half Donut Gauge Card -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Traffic Sources</h3>
+                                <p class="card-subtitle">Visitor distribution by channel</p>
+                            </div>
+                        </div>
+                        <div class="gauge-container">
+                            <svg viewBox="0 0 200 120" class="half-donut">
+                                <defs>
+                                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#5A6ACF"/>
+                                        <stop offset="100%" style="stop-color:#8B5CF6"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Background arc -->
+                                <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#F2F4F7" stroke-width="24" stroke-linecap="round"/>
+                                <!-- Data arcs -->
+                                <path class="gauge-segment" d="M 20 100 A 80 80 0 0 1 72 35" fill="none" stroke="url(#gradient1)" stroke-width="24" stroke-linecap="round"/>
+                                <path class="gauge-segment" d="M 72 35 A 80 80 0 0 1 120 28" fill="none" stroke="#F59E0B" stroke-width="24" stroke-linecap="round"/>
+                                <path class="gauge-segment" d="M 120 28 A 80 80 0 0 1 180 100" fill="none" stroke="#12B76A" stroke-width="24" stroke-linecap="round"/>
+                            </svg>
+                            <div class="gauge-center-label">
+                                <span class="gauge-value">24.5K</span>
+                                <span class="gauge-sublabel">Total Visitors</span>
+                            </div>
+                        </div>
+                        <div class="gauge-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: linear-gradient(135deg, #5A6ACF, #8B5CF6);"></span>
+                                <span>Direct (45%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: #F59E0B;"></span>
+                                <span>Social (30%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: #12B76A;"></span>
+                                <span>Organic (25%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second Charts Row -->
+                <div class="charts-grid">
+                    <!-- Full Donut Chart Card -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Sales by Category</h3>
+                                <p class="card-subtitle">Distribution across product categories</p>
+                            </div>
+                        </div>
+                        <div class="donut-container">
+                            <svg viewBox="0 0 200 200" class="full-donut">
+                                <defs>
+                                    <linearGradient id="donutGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#5A6ACF"/>
+                                        <stop offset="100%" style="stop-color:#8B5CF6"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Background circle -->
+                                <circle cx="100" cy="100" r="70" fill="none" stroke="#F2F4F7" stroke-width="28"/>
+                                <!-- Data segments using stroke-dasharray -->
+                                <circle class="donut-segment" cx="100" cy="100" r="70" fill="none" stroke="url(#donutGradient1)" stroke-width="28" 
+                                    stroke-dasharray="132 308" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+                                <circle class="donut-segment" cx="100" cy="100" r="70" fill="none" stroke="#F59E0B" stroke-width="28" 
+                                    stroke-dasharray="88 352" stroke-dashoffset="-132" transform="rotate(-90 100 100)"/>
+                                <circle class="donut-segment" cx="100" cy="100" r="70" fill="none" stroke="#12B76A" stroke-width="28" 
+                                    stroke-dasharray="66 374" stroke-dashoffset="-220" transform="rotate(-90 100 100)"/>
+                                <circle class="donut-segment" cx="100" cy="100" r="70" fill="none" stroke="#F04438" stroke-width="28" 
+                                    stroke-dasharray="44 396" stroke-dashoffset="-286" transform="rotate(-90 100 100)"/>
+                            </svg>
+                            <div class="donut-center-label">
+                                <span class="donut-value">$89.2K</span>
+                                <span class="donut-sublabel">Total Sales</span>
+                            </div>
+                        </div>
+                        <div class="donut-legend-side">
+                            <div class="legend-item-row">
+                                <span class="legend-dot" style="background: linear-gradient(135deg, #5A6ACF, #8B5CF6);"></span>
+                                <span>Electronics</span>
+                                <span class="legend-percent">30%</span>
+                            </div>
+                            <div class="legend-item-row">
+                                <span class="legend-dot" style="background: #F59E0B;"></span>
+                                <span>Clothing</span>
+                                <span class="legend-percent">20%</span>
+                            </div>
+                            <div class="legend-item-row">
+                                <span class="legend-dot" style="background: #12B76A;"></span>
+                                <span>Home & Garden</span>
+                                <span class="legend-percent">15%</span>
+                            </div>
+                            <div class="legend-item-row">
+                                <span class="legend-dot" style="background: #F04438;"></span>
+                                <span>Sports</span>
+                                <span class="legend-percent">10%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity List Card -->
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Recent Activity</h3>
+                                <p class="card-subtitle">Latest team actions and updates</p>
+                            </div>
+                            <button class="card-action-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                <span>Add Member</span>
+                            </button>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%235A6ACF'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3ESM%3C/text%3E%3C/svg%3E" alt="Sarah Miller" class="activity-avatar">
+                                <div class="activity-content">
+                                    <span class="activity-name">Sarah Miller</span>
+                                    <span class="activity-desc">completed the Q4 report</span>
+                                </div>
+                                <span class="status-pill completed">Completed</span>
+                            </div>
+                            <div class="activity-item">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%238B5CF6'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EMJ%3C/text%3E%3C/svg%3E" alt="Mike Johnson" class="activity-avatar">
+                                <div class="activity-content">
+                                    <span class="activity-name">Mike Johnson</span>
+                                    <span class="activity-desc">updated customer database</span>
+                                </div>
+                                <span class="status-pill in-progress">In Progress</span>
+                            </div>
+                            <div class="activity-item">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%2312B76A'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EEK%3C/text%3E%3C/svg%3E" alt="Emma Kim" class="activity-avatar">
+                                <div class="activity-content">
+                                    <span class="activity-name">Emma Kim</span>
+                                    <span class="activity-desc">scheduled marketing campaign</span>
+                                </div>
+                                <span class="status-pill pending">Pending</span>
+                            </div>
+                            <div class="activity-item">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23F59E0B'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EDW%3C/text%3E%3C/svg%3E" alt="David Wilson" class="activity-avatar">
+                                <div class="activity-content">
+                                    <span class="activity-name">David Wilson</span>
+                                    <span class="activity-desc">reviewed analytics dashboard</span>
+                                </div>
+                                <span class="status-pill completed">Completed</span>
+                            </div>
+                            <div class="activity-item">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23F04438'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3ELT%3C/text%3E%3C/svg%3E" alt="Lisa Thompson" class="activity-avatar">
+                                <div class="activity-content">
+                                    <span class="activity-name">Lisa Thompson</span>
+                                    <span class="activity-desc">created new project milestone</span>
+                                </div>
+                                <span class="status-pill in-progress">In Progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table Card -->
+                <div class="table-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Team Members</h3>
+                            <p class="card-subtitle">Manage your team and permissions</p>
+                        </div>
+                        <div class="table-actions">
+                            <button class="filter-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                                </svg>
+                                <span>Filter</span>
+                            </button>
+                            <button class="export-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                <span>Export</span>
+                            </button>
+                            <button class="add-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                <span>Add Member</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Active</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%235A6ACF'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3ESM%3C/text%3E%3C/svg%3E" alt="Sarah Miller" class="table-avatar">
+                                            <div class="user-cell-info">
+                                                <span class="user-cell-name">Sarah Miller</span>
+                                                <span class="user-cell-email">sarah@example.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Product Manager</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>2 minutes ago</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="action-btn" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Remove">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%238B5CF6'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EMJ%3C/text%3E%3C/svg%3E" alt="Mike Johnson" class="table-avatar">
+                                            <div class="user-cell-info">
+                                                <span class="user-cell-name">Mike Johnson</span>
+                                                <span class="user-cell-email">mike@example.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Developer</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>1 hour ago</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="action-btn" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Remove">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2312B76A'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EEK%3C/text%3E%3C/svg%3E" alt="Emma Kim" class="table-avatar">
+                                            <div class="user-cell-info">
+                                                <span class="user-cell-name">Emma Kim</span>
+                                                <span class="user-cell-email">emma@example.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Designer</td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td>3 hours ago</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="action-btn" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Remove">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23F59E0B'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3EDW%3C/text%3E%3C/svg%3E" alt="David Wilson" class="table-avatar">
+                                            <div class="user-cell-info">
+                                                <span class="user-cell-name">David Wilson</span>
+                                                <span class="user-cell-email">david@example.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Marketing Lead</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>Yesterday</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="action-btn" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Remove">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23F04438'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-weight='700'%3ELT%3C/text%3E%3C/svg%3E" alt="Lisa Thompson" class="table-avatar">
+                                            <div class="user-cell-info">
+                                                <span class="user-cell-name">Lisa Thompson</span>
+                                                <span class="user-cell-email">lisa@example.com</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Data Analyst</td>
+                                    <td><span class="status-badge inactive">Inactive</span></td>
+                                    <td>5 days ago</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="action-btn" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Remove">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-pagination">
+                        <span class="pagination-info">Showing 1–5 of 24 members</span>
+                        <div class="pagination-buttons">
+                            <button class="page-btn">Previous</button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tooltip for charts -->
+    <div class="chart-tooltip" id="chartTooltip">
+        <div class="tooltip-content">
+            <span class="tooltip-month"></span>
+            <div class="tooltip-values">
+                <div class="tooltip-value-item">
+                    <span class="tooltip-dot"></span>
+                    <span class="tooltip-label"></span>
+                    <span class="tooltip-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
