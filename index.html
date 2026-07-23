@@ -1,84 +1,321 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analyzer Suite</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Data Analyzer Suite - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared-ui.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for tool selector tiles */
+        .tool-tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-16);
+            padding: var(--spacing-20);
+        }
+        
+        .tool-tile {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-24);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .tool-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hero);
+            border-color: var(--brand-indigo);
+        }
+        
+        .tool-tile-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-16);
+            font-size: 24px;
+        }
+        
+        .tool-tile-icon.excel {
+            background: linear-gradient(135deg, #1D6F42 0%, #2E8B57 100%);
+            color: white;
+        }
+        
+        .tool-tile-icon.offline {
+            background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);
+            color: white;
+        }
+        
+        .tool-tile-icon.miner {
+            background: linear-gradient(135deg, #EA580C 0%, #F59E0B 100%);
+            color: white;
+        }
+        
+        .tool-tile-icon.f2pool {
+            background: linear-gradient(135deg, #0D9488 0%, #22C55E 100%);
+            color: white;
+        }
+        
+        .tool-tile-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .tool-tile-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        /* Quick stats for dashboard */
+        .quick-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-24);
+            margin-bottom: var(--spacing-24);
+        }
+        
+        .quick-stat-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-20);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .quick-stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        
+        .quick-stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: var(--spacing-4);
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-terminal"></i>
-                <span>ANALYZER_SUITE v1.2</span>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mark">
+                    <div class="logo-gradient"></div>
+                </div>
+                <span class="logo-wordmark">Analyzer Suite</span>
             </div>
 
-            <!-- Elemen T-Rex Animation -->
-          
-
-        </div>
-    </nav>
-
-
-    <!-- Main Dashboard -->
-    <div class="container main-dashboard">
-        <div class="dashboard-header">
-            <h1>SELECT_ANALYSIS_MODULE</h1>
-        </div>
-
-        <div class="tools-grid">
-            <!-- Excel Analyzer -->
-            <a href="excel-analyzer.html" class="tool-card-link">
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-file-excel"></i>
-                    </div>
-                    <h3 class="tool-title">Sub_Account</h3>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-label">Overview</span>
+                    <a href="index.html" class="nav-item active">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
                 </div>
-            </a>
 
-            <!-- Offline Analyzer -->
-            <a href="offline-analyzer.html" class="tool-card-link">
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="tool-title">Offline</h3>
+                <div class="nav-section">
+                    <span class="nav-section-label">Data Tools</span>
+                    <a href="excel-analyzer.html" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span>Sub Account</span>
+                    </a>
+                    <a href="offline-analyzer.html" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                        </svg>
+                        <span>Offline</span>
+                    </a>
+                    <a href="iplocationvalidator.html" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <span>Miner vs Dashboard</span>
+                    </a>
+                    <a href="data-matcher.html" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/>
+                        </svg>
+                        <span>F2pool vs Dashboard</span>
+                    </a>
                 </div>
-            </a>
 
-            <!-- IP & Location Validator -->
-            <a href="iplocationvalidator.html" class="tool-card-link">
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3 class="tool-title">Miner_vs_Dashboard</h3>
+                <div class="nav-section">
+                    <span class="nav-section-label">Reports</span>
+                    <a href="bulk-compare.html" class="nav-item">
+                        <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        <span>Bulk Compare</span>
+                    </a>
                 </div>
-            </a>
+            </nav>
 
-            <!-- Data Matcher -->
-            <a href="data-matcher.html" class="tool-card-link">
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-link"></i>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%235A6ACF'/%3E%3Ctext x='20' y='26' text-anchor='middle' fill='white' font-size='18' font-weight='700'%3EDA%3C/text%3E%3C/svg%3E" alt="User" class="avatar">
+                    <div class="user-info">
+                        <span class="user-name">Data Analyst</span>
+                        <span class="user-role">Administrator</span>
                     </div>
-                    <h3 class="tool-title">F2pool_vs_Dashboard</h3>
                 </div>
-            </a>
-        </div>
+                <button class="collapse-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Navbar -->
+            <header class="navbar">
+                <div class="navbar-left">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                </div>
+                <div class="navbar-right">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search tools..." class="search-input">
+                        <kbd class="search-shortcut">⌘F</kbd>
+                    </div>
+                    <button class="icon-btn" title="Notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="navbar-divider"></div>
+                    <div class="user-block">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%235A6ACF'/%3E%3Ctext x='18' y='24' text-anchor='middle' fill='white' font-size='16' font-weight='700'%3EDA%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar">
+                        <div class="user-details">
+                            <span class="user-display-name">Data Analyst</span>
+                            <span class="user-email">analyst@company.com</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-body">
+                <!-- Quick Stats Row -->
+                <div class="quick-stats-row">
+                    <div class="quick-stat-card">
+                        <div class="quick-stat-value">4</div>
+                        <div class="quick-stat-label">Available Tools</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="quick-stat-value">12</div>
+                        <div class="quick-stat-label">Analyses Today</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="quick-stat-value">98%</div>
+                        <div class="quick-stat-label">Success Rate</div>
+                    </div>
+                    <div class="quick-stat-card">
+                        <div class="quick-stat-value">24</div>
+                        <div class="quick-stat-label">Files Processed</div>
+                    </div>
+                </div>
+
+                <!-- Tool Selector Section -->
+                <div class="list-card">
+                    <div class="list-header">
+                        <div>
+                            <div class="list-title">Data Analysis Tools</div>
+                            <div class="card-subtitle">Select a tool to start analyzing your data</div>
+                        </div>
+                    </div>
+                    <div class="tool-tiles-grid">
+                        <a href="excel-analyzer.html" class="tool-tile">
+                            <div class="tool-tile-icon excel">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </div>
+                            <div class="tool-tile-title">Sub Account</div>
+                            <div class="tool-tile-desc">Check Logical Zone vs Sub-account matching</div>
+                        </a>
+                        
+                        <a href="offline-analyzer.html" class="tool-tile">
+                            <div class="tool-tile-icon offline">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="2" y1="12" x2="22" y2="12"/>
+                                    <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                                </svg>
+                            </div>
+                            <div class="tool-tile-title">Offline</div>
+                            <div class="tool-tile-desc">Analyze offline mining data</div>
+                        </a>
+                        
+                        <a href="iplocationvalidator.html" class="tool-tile">
+                            <div class="tool-tile-icon miner">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                            </div>
+                            <div class="tool-tile-title">Miner vs Dashboard</div>
+                            <div class="tool-tile-desc">Validate IP and location data</div>
+                        </a>
+                        
+                        <a href="data-matcher.html" class="tool-tile">
+                            <div class="tool-tile-icon f2pool">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/>
+                                </svg>
+                            </div>
+                            <div class="tool-tile-title">F2pool vs Dashboard</div>
+                            <div class="tool-tile-desc">Match and compare F2pool data</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Footer -->
-    <div class="footer-bottom">
-        <p>&copy; 2026 DATA_ANALYZER_SUITE :: ALL_RIGHTS_RESERVED</p>
-    </div>
+    <script src="shared-ui.js"></script>
 </body>
-
 </html>
