@@ -102,11 +102,85 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-        <!-- Header -->
-        <div class="analyzer-header">
-            <h1><i class="fas fa-layer-group"></i> Bulk Compare Multi-DC</h1>
-            <p>Download, merge, dan verifikasi beberapa DC F2Pool sekaligus dalam satu proses</p>
-        </div>
+                <!-- Metric Cards Row -->
+                <div class="metrics-grid">
+                    <!-- Gradient Hero Card -->
+                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);">
+                        <button class="card-view-more">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                        <div class="metric-icon-wrapper">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="totalMachines">0</div>
+                        <div class="metric-label">Total Machines</div>
+                        <div class="metric-trend">
+                            <span id="totalDcs">0 DC analyzed</span>
+                        </div>
+                    </div>
+
+                    <!-- Flat Data Card 1 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #E7FAF0;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#027A48" stroke-width="2">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge success" id="matchBadge">↑ 0%</span>
+                        </div>
+                        <div class="metric-value flat" id="matchedCount">0</div>
+                        <div class="metric-label flat">Matched</div>
+                        <div class="comparison-text">
+                            <span style="color: #12B76A;">✓</span> Verified machines
+                        </div>
+                    </div>
+
+                    <!-- Flat Data Card 2 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #FFFAEB;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 8v4m0 4h.01"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge warning" id="pendingBadge">↓ 0%</span>
+                        </div>
+                        <div class="metric-value flat" id="pendingCount">0</div>
+                        <div class="metric-label flat">Pending</div>
+                        <div class="comparison-text">
+                            <span style="color: #F79009;">⚠</span> Needs review
+                        </div>
+                    </div>
+
+                    <!-- Flat Data Card 3 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-header">
+                            <div class="flat-card-icon" style="background: #FEF3F2;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2">
+                                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <span class="trend-badge error" id="errorBadge">0</span>
+                        </div>
+                        <div class="metric-value flat" id="errorCount">0</div>
+                        <div class="metric-label flat">Errors</div>
+                        <div class="comparison-text">
+                            <span style="color: #F04438;">✗</span> Mismatch found
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Tool Content -->
+                <div class="tool-content-card">
 
         <!-- Message Alert -->
         <div id="message" class="message"></div>
@@ -218,7 +292,8 @@
                 <p>Tidak ada hasil untuk filter ini</p>
             </div>
         </div>
-            </div>
+                </div><!-- End tool-content-card -->
+            </div><!-- End dashboard-body -->
         </main>
     </div>
 

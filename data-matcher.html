@@ -101,85 +101,172 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-        <!-- Header -->
-        <div class="analyzer-header">
-            <h1><i class="fas fa-link"></i> F2Pool vs Machinelist Matcher</h1>
-            <p>Verifikasi machinelist dengan data f2pool</p>
-        </div>
+                <!-- Metric Cards Row -->
+                <div class="metric-cards-row">
+                    <!-- Gradient Hero Card -->
+                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);">
+                        <div class="metric-card-header">
+                            <span class="metric-label">Total Matched</span>
+                            <button class="metric-view-more"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="metric-value" id="heroMetricValue">0</div>
+                        <div class="metric-trend">
+                            <span class="trend-badge success"><i class="fas fa-arrow-up"></i> Live Update</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Flat Data Card 1 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-top">
+                            <div class="flat-card-icon" style="background: #E7FAF0; color: #027A48;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span class="trend-badge success" id="onlineTrend"><i class="fas fa-arrow-up"></i> 0%</span>
+                        </div>
+                        <div class="metric-value" id="onlineCount">0</div>
+                        <div class="metric-label">Online Workers</div>
+                        <svg class="sparkline" id="onlineSparkline" viewBox="0 0 80 30"></svg>
+                    </div>
+                    
+                    <!-- Flat Data Card 2 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-top">
+                            <div class="flat-card-icon" style="background: #FFFAEB; color: #B54708;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <span class="trend-badge warning" id="offlineTrend"><i class="fas fa-arrow-down"></i> 0%</span>
+                        </div>
+                        <div class="metric-value" id="offlineCount">0</div>
+                        <div class="metric-label">Offline Workers</div>
+                        <svg class="sparkline" id="offlineSparkline" viewBox="0 0 80 30"></svg>
+                    </div>
+                    
+                    <!-- Flat Data Card 3 -->
+                    <div class="metric-card flat-data">
+                        <div class="flat-card-top">
+                            <div class="flat-card-icon" style="background: #FEF3F2; color: #B42318;">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <span class="trend-badge error" id="deadTrend"><i class="fas fa-minus"></i> 0%</span>
+                        </div>
+                        <div class="metric-value" id="deadCount">0</div>
+                        <div class="metric-label">Dead Workers</div>
+                        <svg class="sparkline" id="deadSparkline" viewBox="0 0 80 30"></svg>
+                    </div>
+                </div>
+                
+                <!-- Upload Section as Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Data Upload</h3>
+                            <p class="card-subtitle">Upload F2Pool dan Machinelist untuk verifikasi</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="upload-grid">
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-water upload-icon" style="color: #5A6ACF;"></i>
+                                    <h4>F2Pool Data</h4>
+                                </div>
+                                <p class="upload-description">Upload file CSV F2Pool (btc-workers)</p>
+                                
+                                <select id="dcSelect" class="modern-select">
+                                    <option value="">— Pilih DC —</option>
+                                </select>
+                                <button id="dcDownloadBtn" class="btn-modern btn-outline" disabled>
+                                    <i class="fas fa-download"></i> Download CSV
+                                </button>
+                                <span id="dcStatus" class="status-text">Belum ada download</span>
+                                
+                                <div class="upload-divider">
+                                    <span>atau upload manual</span>
+                                </div>
+                                
+                                <label class="file-drop-zone" for="f2poolFile">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Drop file CSV atau klik untuk browse</span>
+                                </label>
+                                <span class="file-name-display" id="f2poolName">Belum ada file dipilih</span>
+                                <input type="file" id="f2poolFile" accept=".csv" />
+                            </div>
+                            
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-database upload-icon" style="color: #8B5CF6;"></i>
+                                    <h4>Machinelist Data</h4>
+                                </div>
+                                <p class="upload-description">Upload file CSV atau Excel Machinelist</p>
+                                
+                                <label class="file-drop-zone" for="machinelistFile">
+                                    <i class="fas fa-file-upload"></i>
+                                    <span>Drop file CSV/Excel atau klik untuk browse</span>
+                                </label>
+                                <span class="file-name-display" id="machinelistName">Belum ada file dipilih</span>
+                                <input type="file" id="machinelistFile" accept=".csv,.xlsx" />
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons-row">
+                            <button id="matchBtn" class="btn-modern btn-primary" disabled>
+                                <i class="fas fa-check-double"></i> Mulai Verifikasi
+                            </button>
+                            <button id="clearBtn" class="btn-modern btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Section as Card -->
+                <div class="content-card" id="resultsSection">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Hasil Verifikasi</h3>
+                            <p class="card-subtitle">Data matching antara F2Pool dan Machinelist</p>
+                        </div>
+                        <div class="filter-section-modern" id="filterSection"></div>
+                    </div>
+                    <div class="card-content">
+                        <div id="message" class="message-modern"></div>
+                        
+                        <!-- Filter Buttons -->
+                        
 
-        <!-- Message Alert -->
-        <div id="message" class="message"></div>
-
-        <!-- Upload Section -->
-        <div class="upload-section">
-            <div class="upload-box">
-                <h3><i class="fas fa-water"></i> F2Pool Data</h3>
-                <p>Upload file CSV F2Pool (btc-workers)</p>
-
-                <!-- added: Auto Grab F2Pool (auto download per DC) -->
-                <select id="dcSelect" class="dc-select">
-                    <option value="">— Pilih DC —</option>
-                </select>
-                <button id="dcDownloadBtn" class="dc-download-btn" disabled>
-                    <i class="fas fa-download"></i> Download CSV
-                </button>
-                <span id="dcStatus" class="dc-status">Belum ada download</span>
-
-                <div class="dc-divider">— upload file yang di download —</div>
-
-                <label class="file-label" for="f2poolFile">
-                    <i class="fas fa-cloud-upload-alt"></i> Pilih File CSV
-                </label>
-                <span class="file-name" id="f2poolName">Belum ada file dipilih</span>
-                <input type="file" id="f2poolFile" accept=".csv" />
+                        <!-- Results Table -->
+                        <div class="table-container">
+                            <table class="modern-table" id="resultsTable" style="display: none;">
+                                <thead>
+                                    <tr>
+                                        <th class="sortable" data-column="locationId">Location ID <span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="worker">Worker (F2Pool) <span class="sort-indicator"></span></th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resultsBody"></tbody>
+                            </table>
+                            
+                            <div class="table-pagination">
+                                <span class="pagination-info">Showing 0–0 of 0</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="noData" class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h4>Tidak ada hasil</h4>
+                            <p>Silakan upload data dan mulai verifikasi untuk melihat hasil</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="upload-box">
-                <h3><i class="fas fa-database"></i> Machinelist Data</h3>
-                <p>Upload file CSV atau Excel Machinelist</p>
-                <label class="file-label" for="machinelistFile">
-                    <i class="fas fa-cloud-upload-alt"></i> Pilih File
-                </label>
-                <span class="file-name" id="machinelistName">Belum ada file dipilih</span>
-                <input type="file" id="machinelistFile" accept=".csv,.xlsx" />
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="button-group">
-            <button id="matchBtn" class="btn btn-primary" disabled>
-                <i class="fas fa-check-double"></i> Mulai Verifikasi
-            </button>
-            <button id="clearBtn" class="btn btn-secondary">
-                <i class="fas fa-redo"></i> Reset
-            </button>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results-section" id="resultsSection">
-            <!-- Stats -->
-            <div class="stats-grid" id="stats"></div>
-
-            <!-- Filter Buttons -->
-            <div class="filter-section" id="filterSection"></div>
-
-            <!-- Results Table -->
-            <table class="results-table" id="resultsTable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-column="locationId">Location ID <span class="sort-indicator"></span></th>
-                        <th class="sortable" data-column="worker">Worker (F2Pool) <span class="sort-indicator"></span></th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="resultsBody"></tbody>
-            </table>
-
-            <div id="noData" class="no-data">
-                <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3;"></i>
-                <p>Tidak ada hasil untuk filter ini</p>
-            </div>
-        </div>
             </div>
         </main>
     </div>
