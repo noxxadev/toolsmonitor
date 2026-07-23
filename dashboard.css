@@ -480,6 +480,43 @@ body {
     gap: var(--spacing-24);
 }
 
+/* Tool Content Card - wrapper for tool-specific content */
+.tool-content-card {
+    background: var(--card-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-24);
+    box-shadow: var(--shadow-card);
+}
+
+/* Analyzer Header inside tool-content-card */
+.analyzer-header {
+    margin-bottom: var(--spacing-24);
+    padding-bottom: var(--spacing-20);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.analyzer-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-8);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12);
+}
+
+.analyzer-header h1 i,
+.analyzer-header h1 svg {
+    color: var(--brand-indigo);
+}
+
+.analyzer-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
 /* Hero Banner Row */
 .hero-row {
     display: grid;
