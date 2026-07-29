@@ -1,8 +1,4 @@
-// Navigation back button
-document.querySelector('.back-button')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.location.href = 'index.html';
-});
+// Navigation back button - removed as we're using sidebar navigation
 
 // Event listeners
 document.getElementById('excelFile')?.addEventListener('change', handleFile, false);
@@ -15,13 +11,14 @@ document.getElementById('offlineIpInput')?.addEventListener('input', function() 
 // Drag and drop functionality
 const fileUploadArea = document.getElementById('fileUploadArea');
 const fileInput = document.getElementById('excelFile');
+const excelFileName = document.getElementById('excelFileName');
 
 if (fileUploadArea && fileInput) {
     fileUploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        fileUploadArea.style.borderColor = 'var(--primary)';
-        fileUploadArea.style.backgroundColor = 'var(--light)';
+        fileUploadArea.style.borderColor = '#5A6ACF';
+        fileUploadArea.style.backgroundColor = '#FAFBFF';
     });
 
     fileUploadArea.addEventListener('dragleave', (e) => {
@@ -30,7 +27,7 @@ if (fileUploadArea && fileInput) {
         const rect = fileUploadArea.getBoundingClientRect();
         if (e.clientX <= rect.left || e.clientX >= rect.right ||
             e.clientY <= rect.top || e.clientY >= rect.bottom) {
-            fileUploadArea.style.borderColor = 'var(--gray-light)';
+            fileUploadArea.style.borderColor = '#E7E9F3';
             fileUploadArea.style.backgroundColor = 'white';
         }
     });
@@ -38,7 +35,7 @@ if (fileUploadArea && fileInput) {
     fileUploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        fileUploadArea.style.borderColor = 'var(--gray-light)';
+        fileUploadArea.style.borderColor = '#E7E9F3';
         fileUploadArea.style.backgroundColor = 'white';
         
         if (e.dataTransfer.files.length) {
@@ -49,6 +46,15 @@ if (fileUploadArea && fileInput) {
 
     fileUploadArea.addEventListener('click', (e) => {
         fileInput.click();
+    });
+    
+    // Update file name display
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            excelFileName.textContent = this.files[0].name;
+        } else {
+            excelFileName.textContent = 'Belum ada file dipilih';
+        }
     });
 }
 
@@ -88,11 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Setup event listeners for tabs
 function setupTabEventListeners() {
-    const tabButtons = document.querySelectorAll('.analyzer-tabs .tab-btn');
+    const tabButtons = document.querySelectorAll('.analyzer-tabs .btn-filter');
     tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const selectedTab = btn.getAttribute('data-tab');
-            switchTab(selectedTab);
+            if (selectedTab) {
+                switchTab(selectedTab);
+            }
         });
     });
 }
@@ -102,7 +110,7 @@ function switchTab(tabId) {
     currentTab = tabId;
     
     // Update active class on tab buttons
-    const tabButtons = document.querySelectorAll('.analyzer-tabs .tab-btn');
+    const tabButtons = document.querySelectorAll('.analyzer-tabs .btn-filter');
     tabButtons.forEach(btn => {
         if (btn.getAttribute('data-tab') === tabId) {
             btn.classList.add('active');
@@ -117,7 +125,7 @@ function switchTab(tabId) {
 
 // Setup event listeners for line filter buttons
 function setupLineFilterListeners() {
-    const lineButtons = document.querySelectorAll('.line-filter-btn');
+    const lineButtons = document.querySelectorAll('#lineFilterButtons .btn-filter');
     lineButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const line = btn.getAttribute('data-line');
@@ -198,11 +206,12 @@ function handleFile(e) {
         } catch (error) {
             loadingDiv.style.display = 'none';
             outputDiv.innerHTML = `
-                <div class="empty-state" style="background: white; border-radius: var(--border-radius); box-shadow: var(--shadow);">
-                    <i class="fas fa-exclamation-triangle" style="color: #ea5455;"></i>
-                    <h3>Terjadi Kesalahan</h3>
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-exclamation-triangle" style="color: #B42318;"></i>
+                    </div>
+                    <h4>Terjadi Kesalahan</h4>
                     <p>File tidak dapat diproses. Pastikan file adalah format Excel yang valid.</p>
-                    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--gray);">Error: ${error.message}</p>
                 </div>
             `;
             console.error('Error processing file:', error);
@@ -212,15 +221,30 @@ function handleFile(e) {
     reader.onerror = function() {
         loadingDiv.style.display = 'none';
         outputDiv.innerHTML = `
-            <div class="empty-state" style="background: white; border-radius: var(--border-radius); box-shadow: var(--shadow);">
-                <i class="fas fa-times-circle" style="color: #ea5455;"></i>
-                <h3>Gagal Membaca File</h3>
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-times-circle" style="color: #B42318;"></i>
+                </div>
+                <h4>Gagal Membaca File</h4>
                 <p>Terjadi kesalahan saat membaca file. Coba lagi dengan file yang berbeda.</p>
             </div>
         `;
     };
 
     reader.readAsArrayBuffer(f);
+}
+
+// Update counts in UI - also update tab button counts
+function updateCounts() {
+    document.getElementById('totalCount').textContent = currentData['harus-cek'].length + currentData['sudah-turun'].length + currentData['dhcp'].length;
+    document.getElementById('harusCekCount').textContent = currentData['harus-cek'].length;
+    document.getElementById('sudahTurunCount').textContent = currentData['sudah-turun'].length;
+    document.getElementById('dhcpCount').textContent = currentData['dhcp'].length;
+    
+    // Also update tab button counts
+    document.getElementById('harusCekCountTab').textContent = currentData['harus-cek'].length;
+    document.getElementById('sudahTurunCountTab').textContent = currentData['sudah-turun'].length;
+    document.getElementById('dhcpCountTab').textContent = currentData['dhcp'].length;
 }
 
 // Compare TextBox IPs with Excel Active IPs
@@ -250,16 +274,13 @@ function compareAndDisplayData() {
         }
     });
 
-    // Update Counts in UI
-    document.getElementById('totalCount').textContent = offlineIPs.length;
-    document.getElementById('harusCekCount').textContent = harusCek.length;
-    document.getElementById('sudahTurunCount').textContent = sudahTurun.length;
-    document.getElementById('dhcpCount').textContent = dhcp.length;
-
     // Update global state data
     currentData['harus-cek'] = harusCek;
     currentData['sudah-turun'] = sudahTurun;
     currentData['dhcp'] = dhcp;
+
+    // Update counts in UI
+    updateCounts();
 
     // Render active tab content
     renderActiveTab();
@@ -270,7 +291,6 @@ function renderActiveTab() {
     const outputDiv = document.getElementById('output');
     if (!outputDiv) return;
     
-    outputDiv.className = 'output-container tab-panel-container ' + currentTab;
     outputDiv.innerHTML = '';
     
     const data = currentData[currentTab] || [];
@@ -284,111 +304,86 @@ function renderActiveTab() {
         'dhcp': 'IP ini tidak terdaftar dalam database master-data.js.'
     };
     
-    // Create tab pane element
-    const pane = document.createElement('div');
-    pane.className = 'tab-pane';
-    
-    // Header containing explanation and copy list button
-    const header = document.createElement('div');
-    header.className = 'tab-pane-header';
-    
-    const desc = document.createElement('p');
-    desc.className = 'tab-pane-description';
-    desc.textContent = descriptions[currentTab];
-    header.appendChild(desc);
-    
-    if (filteredData.length > 0) {
-        const copyListBtn = document.createElement('button');
-        copyListBtn.className = 'btn-copy-small';
-        copyListBtn.innerHTML = '<i class="fas fa-copy"></i> Copy IP List';
-        copyListBtn.addEventListener('click', () => copyIpList(filteredData, copyListBtn));
-        header.appendChild(copyListBtn);
-    }
-    
-    pane.appendChild(header);
-    
-    // Body containing table or empty state
-    const body = document.createElement('div');
-    body.className = 'tab-pane-body';
-    
     if (filteredData.length === 0) {
         const emptyMsg = (selectedLines.size > 0 && data.length > 0)
             ? 'Tidak ada IP yang cocok dengan filter Line yang dipilih.'
             : 'Tidak ada IP dalam kelompok ini.';
-        body.innerHTML = `
-            <div class="tab-empty-state">
-                <i class="fas fa-info-circle"></i>
+        outputDiv.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h4>Tidak Ada Data</h4>
                 <p>${emptyMsg}</p>
             </div>
         `;
-    } else {
-        const table = document.createElement('table');
-        table.className = 'tab-table';
-        
-        const thead = table.createTHead();
-        const headerRow = thead.insertRow();
-        
-        const thIp = document.createElement('th');
-        thIp.textContent = 'IP Address';
-        headerRow.appendChild(thIp);
-        
-        const thLoc = document.createElement('th');
-        thLoc.textContent = 'Location ID';
-        headerRow.appendChild(thLoc);
-        
-        const thAction = document.createElement('th');
-        thAction.textContent = 'Aksi';
-        headerRow.appendChild(thAction);
-        
-        const tbody = table.createTBody();
-        filteredData.forEach(item => {
-            const tr = tbody.insertRow();
-            
-            const cellIp = tr.insertCell();
-            cellIp.textContent = item.ip;
-            cellIp.style.fontWeight = '600';
-            
-            const cellLoc = tr.insertCell();
-            cellLoc.textContent = item.location;
-            
-            const cellAction = tr.insertCell();
-            const rowCopyBtn = document.createElement('button');
-            rowCopyBtn.className = 'btn-copy-small';
-            rowCopyBtn.style.padding = '4px 8px';
-            rowCopyBtn.style.fontSize = '0.8rem';
-            rowCopyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-            
-            rowCopyBtn.addEventListener('click', () => {
-                const textToCopy = `${item.ip} - ${item.location}`;
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    const originalHTML = rowCopyBtn.innerHTML;
-                    rowCopyBtn.innerHTML = '<i class="fas fa-check" style="color: #28c76f;"></i> Copied!';
-                    setTimeout(() => {
-                        rowCopyBtn.innerHTML = originalHTML;
-                    }, 1500);
-                }).catch(err => {
-                    // Fallback copy
-                    const textArea = document.createElement('textarea');
-                    textArea.value = textToCopy;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    const originalHTML = rowCopyBtn.innerHTML;
-                    rowCopyBtn.innerHTML = '<i class="fas fa-check" style="color: #28c76f;"></i> Copied!';
-                    setTimeout(() => {
-                        rowCopyBtn.innerHTML = originalHTML;
-                    }, 1500);
-                });
-            });
-            cellAction.appendChild(rowCopyBtn);
-        });
-        
-        body.appendChild(table);
+        return;
     }
     
-    pane.appendChild(body);
-    outputDiv.appendChild(pane);
+    // Create table
+    const table = document.createElement('table');
+    table.className = 'modern-table';
+    
+    const thead = table.createTHead();
+    const headerRow = thead.insertRow();
+    
+    const thIp = document.createElement('th');
+    thIp.textContent = 'IP Address';
+    headerRow.appendChild(thIp);
+    
+    const thLoc = document.createElement('th');
+    thLoc.textContent = 'Location ID';
+    headerRow.appendChild(thLoc);
+    
+    const thAction = document.createElement('th');
+    thAction.textContent = 'Aksi';
+    headerRow.appendChild(thAction);
+    
+    const tbody = table.createTBody();
+    filteredData.forEach(item => {
+        const tr = tbody.insertRow();
+        
+        const cellIp = tr.insertCell();
+        cellIp.textContent = item.ip;
+        cellIp.style.fontWeight = '600';
+        
+        const cellLoc = tr.insertCell();
+        cellLoc.textContent = item.location;
+        
+        const cellAction = tr.insertCell();
+        const rowCopyBtn = document.createElement('button');
+        rowCopyBtn.className = 'btn-filter';
+        rowCopyBtn.style.padding = '4px 8px';
+        rowCopyBtn.style.fontSize = '12px';
+        rowCopyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        
+        rowCopyBtn.addEventListener('click', () => {
+            const textToCopy = `${item.ip} - ${item.location}`;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalHTML = rowCopyBtn.innerHTML;
+                rowCopyBtn.innerHTML = '<i class="fas fa-check" style="color: #027A48;"></i> Copied!';
+                setTimeout(() => {
+                    rowCopyBtn.innerHTML = originalHTML;
+                }, 1500);
+            }).catch(err => {
+                // Fallback copy
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                const originalHTML = rowCopyBtn.innerHTML;
+                rowCopyBtn.innerHTML = '<i class="fas fa-check" style="color: #027A48;"></i> Copied!';
+                setTimeout(() => {
+                    rowCopyBtn.innerHTML = originalHTML;
+                }, 1500);
+            });
+        });
+        cellAction.appendChild(rowCopyBtn);
+    });
+    
+    outputDiv.appendChild(table);
 }
 
 // Copy IP List function
