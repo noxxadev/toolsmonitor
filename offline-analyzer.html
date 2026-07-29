@@ -112,33 +112,30 @@
                     </div>
                     <div class="card-content">
                         <!-- Input & Upload Section -->
-                        <div class="upload-grid" style="grid-template-columns: 1fr; gap: 20px;">
+                        <div class="input-methods-section">
                             <!-- Input IP Offline -->
-                            <div class="upload-box-modern">
-                                <div class="upload-header">
-                                    <i class="fas fa-server upload-icon" style="color: #5A6ACF;"></i>
-                                    <h4>Masukkan IP Offline</h4>
-                                </div>
-                                <p class="upload-description">Masukkan IP offline yang ingin dicek status lokasinya (satu per baris)</p>
-                                <textarea id="offlineIpInput" class="modern-select" style="min-height: 120px; font-family: monospace;" placeholder="Contoh:
+                            <div class="manual-input-section">
+                                <label class="input-label-modern">Masukkan IP Offline</label>
+                                <p class="input-description">Masukkan IP offline yang ingin dicek status lokasinya (satu per baris)</p>
+                                <textarea id="offlineIpInput" class="modern-input-field" style="min-height: 120px; font-family: monospace;" placeholder="Contoh:
 10.64.2.15
 10.69.3.106"></textarea>
                             </div>
                             
                             <!-- Upload File Excel -->
                             <div class="upload-box-modern">
-                                <div class="upload-header">
-                                    <i class="fas fa-database upload-icon" style="color: #8B5CF6;"></i>
-                                    <h4>Upload Data Excel</h4>
+                                <div class="upload-header-modern">
+                                    <i class="fas fa-database upload-icon-modern"></i>
+                                    <h4 class="upload-title-modern">Upload Data Excel</h4>
                                 </div>
-                                <p class="upload-description">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom location_id</p>
+                                <p class="upload-description-modern">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom location_id</p>
                                 
                                 <label class="file-drop-zone" for="excelFile" id="fileUploadArea">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <span>Drop file Excel atau klik untuk browse</span>
+                                    <i class="fas fa-cloud-upload-alt drop-icon"></i>
+                                    <span class="drop-text">Drop file Excel atau klik untuk browse</span>
                                 </label>
                                 <span class="file-name-display" id="excelFileName">Belum ada file dipilih</span>
-                                <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
+                                <input type="file" id="excelFile" class="file-input-hidden" accept=".xls,.xlsx" />
                             </div>
                         </div>
                         
