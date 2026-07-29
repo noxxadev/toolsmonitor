@@ -102,197 +102,153 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-                <!-- Metric Cards Row -->
-                <div class="metrics-grid">
-                    <!-- Gradient Hero Card -->
-                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);">
-                        <button class="card-view-more">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
-                        <div class="metric-icon-wrapper">
-                            <div class="metric-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="metric-value" id="totalMachines">0</div>
-                        <div class="metric-label">Total Machines</div>
-                        <div class="metric-trend">
-                            <span id="totalDcs">0 DC analyzed</span>
+                <!-- Step 1: Pilih DC -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title"><span class="step-badge">1</span> Pilih DC F2Pool</h3>
+                            <p class="card-subtitle">Pilih Data Center yang akan dianalisis</p>
                         </div>
                     </div>
-
-                    <!-- Flat Data Card 1 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #E7FAF0;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#027A48" stroke-width="2">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                    <div class="card-content">
+                        <div class="dc-toolbar">
+                            <input type="text" id="dcSearch" class="modern-search-input" placeholder="Cari DC... (mis. A1, B5)">
+                            <div class="dc-group-buttons">
+                                <span class="group-label">Pilih Grup:</span>
+                                <button class="btn-modern btn-sm" data-group="all">Semua</button>
+                                <button class="btn-modern btn-sm" data-group="A">DC A</button>
+                                <button class="btn-modern btn-sm" data-group="B">DC B</button>
+                                <button class="btn-modern btn-sm" data-group="C">DC C</button>
+                                <button class="btn-modern btn-sm" data-group="D">DC D</button>
+                                <button class="btn-modern btn-sm" data-group="E">DC E</button>
+                                <button class="btn-modern btn-sm" data-group="F">DC F</button>
+                                <button class="btn-modern btn-sm btn-clear" data-group="">Bersihkan</button>
                             </div>
-                            <span class="trend-badge success" id="matchBadge">↑ 0%</span>
                         </div>
-                        <div class="metric-value flat" id="matchedCount">0</div>
-                        <div class="metric-label flat">Matched</div>
-                        <div class="comparison-text">
-                            <span style="color: #12B76A;">✓</span> Verified machines
-                        </div>
-                    </div>
 
-                    <!-- Flat Data Card 2 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FFFAEB;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 8v4m0 4h.01"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge warning" id="pendingBadge">↓ 0%</span>
-                        </div>
-                        <div class="metric-value flat" id="pendingCount">0</div>
-                        <div class="metric-label flat">Pending</div>
-                        <div class="comparison-text">
-                            <span style="color: #F79009;">⚠</span> Needs review
-                        </div>
-                    </div>
+                        <div class="dc-checkbox-grid" id="dcCheckboxGrid"></div>
 
-                    <!-- Flat Data Card 3 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FEF3F2;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2">
-                                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge error" id="errorBadge">0</span>
+                        <div class="dc-action-row">
+                            <span class="dc-selected-count" id="dcSelectedCount">0 DC dipilih</span>
+                            <button id="dcDownloadBtn" class="btn-modern btn-primary" disabled>
+                                <i class="fas fa-download"></i> Download Selected
+                            </button>
                         </div>
-                        <div class="metric-value flat" id="errorCount">0</div>
-                        <div class="metric-label flat">Errors</div>
-                        <div class="comparison-text">
-                            <span style="color: #F04438;">✗</span> Mismatch found
+
+                        <div class="dc-progress-wrapper" id="dcProgressWrapper" style="display: none;">
+                            <div class="dc-progress-bar"><div class="dc-progress-fill" id="dcProgressFill"></div></div>
+                            <span class="dc-progress-text" id="dcProgressText">0 / 0</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Main Tool Content -->
-                <div class="tool-content-card">
+                <!-- Step 2: Upload Data -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title"><span class="step-badge">2</span> Upload Data</h3>
+                            <p class="card-subtitle">Upload file F2Pool CSV dan Machinelist untuk verifikasi</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="upload-grid">
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-water upload-icon" style="color: #5A6ACF;"></i>
+                                    <h4>F2Pool CSV (Multi)</h4>
+                                </div>
+                                <p class="upload-description">Blok & upload semua file CSV hasil download. Akan otomatis di-merge.</p>
+                                
+                                <label class="file-drop-zone" for="f2poolFiles">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Pilih Beberapa File CSV</span>
+                                </label>
+                                <span class="file-name-display" id="f2poolName">Belum ada file dipilih</span>
+                                <input type="file" id="f2poolFiles" accept=".csv" multiple />
+                            </div>
 
-        <!-- Message Alert -->
-        <div id="message" class="message"></div>
-
-        <!-- STEP 1: Pilih DC -->
-        <div class="bulk-step">
-            <div class="bulk-step-header">
-                <span class="step-number">1</span>
-                <h3><i class="fas fa-check-square"></i> Pilih DC F2Pool</h3>
-            </div>
-
-            <div class="dc-toolbar">
-                <input type="text" id="dcSearch" class="dc-search" placeholder="Cari DC... (mis. A1, B5)">
-                <div class="dc-group-buttons">
-                    <span class="group-label">Pilih Grup:</span>
-                    <button class="btn-group" data-group="all">Semua</button>
-                    <button class="btn-group" data-group="A">DC A</button>
-                    <button class="btn-group" data-group="B">DC B</button>
-                    <button class="btn-group" data-group="C">DC C</button>
-                    <button class="btn-group" data-group="D">DC D</button>
-                    <button class="btn-group" data-group="E">DC E</button>
-                    <button class="btn-group" data-group="F">DC F</button>
-                    <button class="btn-group btn-clear" data-group="">Bersihkan</button>
-                </div>
-            </div>
-
-            <div class="dc-checkbox-grid" id="dcCheckboxGrid"></div>
-
-            <div class="dc-action-row">
-                <span class="dc-selected-count" id="dcSelectedCount">0 DC dipilih</span>
-                <button id="dcDownloadBtn" class="btn btn-primary bulk-download-btn" disabled>
-                    <i class="fas fa-download"></i> Download Selected
-                </button>
-            </div>
-
-            <div class="dc-progress-wrapper" id="dcProgressWrapper" style="display: none;">
-                <div class="dc-progress-bar"><div class="dc-progress-fill" id="dcProgressFill"></div></div>
-                <span class="dc-progress-text" id="dcProgressText">0 / 0</span>
-            </div>
-        </div>
-
-        <!-- STEP 2: Upload -->
-        <div class="bulk-step">
-            <div class="bulk-step-header">
-                <span class="step-number">2</span>
-                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Data</h3>
-            </div>
-
-            <div class="upload-section">
-                <div class="upload-box">
-                    <h3><i class="fas fa-water"></i> F2Pool CSV (Multi)</h3>
-                    <p>Blok &amp; upload semua file CSV hasil download. Akan otomatis di-merge.</p>
-                    <label class="file-label" for="f2poolFiles">
-                        <i class="fas fa-cloud-upload-alt"></i> Pilih Beberapa File CSV
-                    </label>
-                    <span class="file-name" id="f2poolName">Belum ada file dipilih</span>
-                    <input type="file" id="f2poolFiles" accept=".csv" multiple />
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-database upload-icon" style="color: #8B5CF6;"></i>
+                                    <h4>Machinelist Data</h4>
+                                </div>
+                                <p class="upload-description">Upload 1 file CSV atau Excel Machinelist (bisa berisi multiple DC).</p>
+                                
+                                <label class="file-drop-zone" for="machinelistFile">
+                                    <i class="fas fa-file-upload"></i>
+                                    <span>Pilih File CSV/Excel</span>
+                                </label>
+                                <span class="file-name-display" id="machinelistName">Belum ada file dipilih</span>
+                                <input type="file" id="machinelistFile" accept=".csv,.xlsx" />
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons-row">
+                            <button id="matchBtn" class="btn-modern btn-primary" disabled>
+                                <i class="fas fa-check-double"></i> Mulai Verifikasi Bulk
+                            </button>
+                            <button id="clearBtn" class="btn-modern btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="upload-box">
-                    <h3><i class="fas fa-database"></i> Machinelist Data</h3>
-                    <p>Upload 1 file CSV atau Excel Machinelist (bisa berisi multiple DC).</p>
-                    <label class="file-label" for="machinelistFile">
-                        <i class="fas fa-cloud-upload-alt"></i> Pilih File
-                    </label>
-                    <span class="file-name" id="machinelistName">Belum ada file dipilih</span>
-                    <input type="file" id="machinelistFile" accept=".csv,.xlsx" />
+                <!-- Results Section -->
+                <div class="content-card" id="resultsSection" style="display: none;">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Hasil Verifikasi</h3>
+                            <p class="card-subtitle">Hasil matching data bulk multi-DC</p>
+                        </div>
+                        <div class="filter-section-modern" id="filterSection"></div>
+                    </div>
+                    <div class="card-content">
+                        <div id="message" class="message-modern"></div>
+                        
+                        <!-- Stats Section -->
+                        <div class="stats-grid" id="stats"></div>
+
+                        <!-- Per-DC Summary -->
+                        <div id="dcSummarySection" class="dc-summary-section" style="display: none;">
+                            <h4 class="dc-summary-title"><i class="fas fa-th-large"></i> Breakdown per DC</h4>
+                            <div class="dc-summary-grid" id="dcSummaryGrid"></div>
+                        </div>
+
+                        <!-- Filter Buttons -->
+                        
+
+                        <!-- Results Table -->
+                        <div class="table-container">
+                            <table class="modern-table" id="resultsTable" style="display: none;">
+                                <thead>
+                                    <tr>
+                                        <th class="sortable" data-column="dc">DC <span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="ip">IP <span class="sort-indicator"></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resultsBody"></tbody>
+                            </table>
+                            
+                            <div class="table-pagination">
+                                <span class="pagination-info">Showing 0–0 of 0</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="noData" class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h4>Tidak ada hasil</h4>
+                            <p>Silakan upload data dan mulai verifikasi untuk melihat hasil</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="button-group">
-            <button id="matchBtn" class="btn btn-primary" disabled>
-                <i class="fas fa-check-double"></i> Mulai Verifikasi Bulk
-            </button>
-            <button id="clearBtn" class="btn btn-secondary">
-                <i class="fas fa-redo"></i> Reset
-            </button>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results-section" id="resultsSection">
-            <!-- Stats -->
-            <div class="stats-grid" id="stats"></div>
-
-            <!-- Per-DC Summary (added: bulk breakdown) -->
-            <div id="dcSummarySection" class="dc-summary-section" style="display: none;">
-                <h4 class="dc-summary-title"><i class="fas fa-th-large"></i> Breakdown per DC</h4>
-                <div class="dc-summary-grid" id="dcSummaryGrid"></div>
-            </div>
-
-            <!-- Filter Buttons -->
-            <div class="filter-section" id="filterSection"></div>
-
-            <!-- Results Table -->
-            <table class="results-table" id="resultsTable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-column="dc">DC <span class="sort-indicator"></span></th>
-                        <th class="sortable" data-column="ip">IP <span class="sort-indicator"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="resultsBody"></tbody>
-            </table>
-
-            <div id="noData" class="no-data">
-                <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3;"></i>
-                <p>Tidak ada hasil untuk filter ini</p>
-            </div>
-        </div>
-                </div><!-- End tool-content-card -->
             </div><!-- End dashboard-body -->
         </main>
     </div>
