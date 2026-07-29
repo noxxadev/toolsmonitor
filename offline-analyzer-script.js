@@ -1,5 +1,65 @@
 // Navigation back button - removed as we're using sidebar navigation
 
+// Reset functionality
+document.getElementById('resetBtn')?.addEventListener('click', function() {
+    // Clear input
+    document.getElementById('offlineIpInput').value = '';
+    
+    // Clear file input
+    const fileInput = document.getElementById('excelFile');
+    if (fileInput) {
+        fileInput.value = '';
+    }
+    document.getElementById('excelFileName').textContent = 'Belum ada file dipilih';
+    
+    // Hide results card
+    document.getElementById('resultsCard').style.display = 'none';
+    document.getElementById('controls').style.display = 'none';
+    document.getElementById('output').innerHTML = `
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <h4>Belum Ada Data</h4>
+            <p>Masukkan IP Offline dan Upload berkas Excel untuk memulai analisis.</p>
+        </div>
+    `;
+    
+    // Reset state variables
+    excelActiveIPs.clear();
+    uploadedExcelData = [];
+    currentTab = 'harus-cek';
+    currentData = {
+        'harus-cek': [],
+        'sudah-turun': [],
+        'dhcp': []
+    };
+    selectedLines.clear();
+    
+    // Reset line filter buttons
+    document.querySelectorAll('#lineFilterButtons .btn-filter').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Reset tab buttons
+    document.querySelectorAll('.analyzer-tabs .btn-filter').forEach((btn, index) => {
+        if (index === 0) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Reset counts
+    document.getElementById('totalCount').textContent = '0';
+    document.getElementById('harusCekCount').textContent = '0';
+    document.getElementById('sudahTurunCount').textContent = '0';
+    document.getElementById('dhcpCount').textContent = '0';
+    document.getElementById('harusCekCountTab').textContent = '0';
+    document.getElementById('sudahTurunCountTab').textContent = '0';
+    document.getElementById('dhcpCountTab').textContent = '0';
+});
+
 // Event listeners
 document.getElementById('excelFile')?.addEventListener('change', handleFile, false);
 document.getElementById('offlineIpInput')?.addEventListener('input', function() {
@@ -200,7 +260,10 @@ function handleFile(e) {
             });
 
             loadingDiv.style.display = 'none';
-            controlsDiv.style.display = 'block';
+            controlsDiv.style.display = 'flex';
+            
+            // Show results card
+            document.getElementById('resultsCard').style.display = 'block';
 
             compareAndDisplayData();
         } catch (error) {

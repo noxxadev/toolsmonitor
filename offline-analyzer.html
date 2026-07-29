@@ -102,50 +102,69 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-                <!-- Main Tool Content as Card -->
+                <!-- Input & Upload Section as Card -->
                 <div class="content-card">
                     <div class="card-header">
                         <div>
-                            <h3 class="card-title">Offline Analyzer</h3>
-                            <p class="card-subtitle">Analisis data offline dari MinerPlus dengan filter IP per Line</p>
+                            <h3 class="card-title">Input Data</h3>
+                            <p class="card-subtitle">Masukkan IP Offline atau upload file Excel untuk analisis</p>
                         </div>
                     </div>
                     <div class="card-content">
-                        <!-- Input & Upload Section -->
-                        <div class="input-methods-section">
+                        <div class="upload-grid" style="grid-template-columns: 1fr;">
                             <!-- Input IP Offline -->
-                            <div class="manual-input-section">
-                                <label class="input-label-modern">Masukkan IP Offline</label>
-                                <p class="input-description">Masukkan IP offline yang ingin dicek status lokasinya (satu per baris)</p>
-                                <textarea id="offlineIpInput" class="modern-input-field" style="min-height: 120px; font-family: monospace;" placeholder="Contoh:
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-keyboard upload-icon" style="color: #5A6ACF;"></i>
+                                    <h4>Input IP Manual</h4>
+                                </div>
+                                <p class="upload-description">Masukkan IP offline yang ingin dicek status lokasinya (satu per baris)</p>
+                                <textarea id="offlineIpInput" class="modern-input-field" style="min-height: 120px; font-family: monospace; width: 100%; padding: 12px; border: 1px solid #E7E9F3; border-radius: 8px; resize: vertical;" placeholder="Contoh:
 10.64.2.15
 10.69.3.106"></textarea>
                             </div>
                             
                             <!-- Upload File Excel -->
                             <div class="upload-box-modern">
-                                <div class="upload-header-modern">
-                                    <i class="fas fa-database upload-icon-modern"></i>
-                                    <h4 class="upload-title-modern">Upload Data Excel</h4>
+                                <div class="upload-header">
+                                    <i class="fas fa-file-excel upload-icon" style="color: #027A48;"></i>
+                                    <h4>Upload Data Excel</h4>
                                 </div>
-                                <p class="upload-description-modern">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom location_id</p>
+                                <p class="upload-description">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom location_id</p>
                                 
                                 <label class="file-drop-zone" for="excelFile" id="fileUploadArea">
-                                    <i class="fas fa-cloud-upload-alt drop-icon"></i>
-                                    <span class="drop-text">Drop file Excel atau klik untuk browse</span>
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Drop file Excel atau klik untuk browse</span>
                                 </label>
                                 <span class="file-name-display" id="excelFileName">Belum ada file dipilih</span>
                                 <input type="file" id="excelFile" class="file-input-hidden" accept=".xls,.xlsx" />
                             </div>
                         </div>
                         
+                        <div class="action-buttons-row" style="margin-top: 20px;">
+                            <button id="resetBtn" class="btn-modern btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Section as Card -->
+                <div class="content-card" id="resultsCard" style="display: none;">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Hasil Analisis</h3>
+                            <p class="card-subtitle">Filter dan lihat hasil analisis IP offline</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
                         <!-- Loading -->
                         <div id="loading" class="message-modern" style="display: none; text-align: center;">
                             <i class="fas fa-spinner fa-spin"></i> Memproses data, harap tunggu...
                         </div>
 
                         <!-- Controls & Results Summary -->
-                        <div id="controls" class="filter-section-modern" style="display: none; flex-direction: column; gap: 12px; margin-top: 16px;">
+                        <div id="controls" class="filter-section-modern" style="display: none; flex-direction: column; gap: 12px;">
                             <div class="stats-container" id="statsContainer" style="grid-template-columns: repeat(4, 1fr);">
                                 <div class="stat-card">
                                     <h4>Total Input</h4>
@@ -165,7 +184,7 @@
                                 </div>
                             </div>
                             
-                            <div class="filter-section-modern" id="lineFilterButtons" style="justify-content: center;">
+                            <div class="filter-section-modern" id="lineFilterButtons" style="justify-content: center; margin-top: 12px;">
                                 <button type="button" class="btn-filter" data-line="A">Line A</button>
                                 <button type="button" class="btn-filter" data-line="B">Line B</button>
                                 <button type="button" class="btn-filter" data-line="C">Line C</button>
@@ -174,7 +193,7 @@
                                 <button type="button" class="btn-filter" data-line="F">Line F</button>
                             </div>
                             
-                            <div class="analyzer-tabs" style="margin-top: 8px;">
+                            <div class="analyzer-tabs" style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button type="button" class="btn-filter active" data-tab="harus-cek" id="tabHarusCek">
                                     <i class="fas fa-exclamation-triangle"></i> Harus Cek: <strong id="harusCekCountTab">0</strong>
                                 </button>
@@ -203,7 +222,7 @@
                                     <i class="fas fa-database"></i>
                                 </div>
                                 <h4>Belum Ada Data</h4>
-                                <p>Masukkan IP Offline di Langkah 1 dan Upload berkas Excel di Langkah 2 untuk memulai analisis.</p>
+                                <p>Masukkan IP Offline dan Upload berkas Excel untuk memulai analisis.</p>
                             </div>
                         </div>
                     </div>
