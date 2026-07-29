@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline Analyzer - DataAnalyzer</title>
     <link rel="stylesheet" href="shared-ui.css">
-    <link rel="stylesheet" href="offline-analyzer.css">
+    <link rel="stylesheet" href="data-matcher.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -103,187 +102,116 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-                <!-- Metric Cards Row -->
-                <div class="metrics-grid">
-                    <!-- Gradient Hero Card -->
-                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #0D9488 0%, #22C55E 100%);">
-                        <button class="card-view-more">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
-                        <div class="metric-icon-wrapper">
-                            <div class="metric-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="metric-value" id="foundCount">0</div>
-                        <div class="metric-label">Found Online</div>
-                        <div class="metric-trend">
-                            <span id="foundPercent">0% recovery rate</span>
+                <!-- Main Tool Content as Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Offline Analyzer</h3>
+                            <p class="card-subtitle">Analisis data offline dari MinerPlus dengan filter IP per Line</p>
                         </div>
                     </div>
-
-                    <!-- Flat Data Card 1 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FEF3F2;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2">
-                                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge error" id="offlineBadge">0</span>
-                        </div>
-                        <div class="metric-value flat" id="stillOfflineCount">0</div>
-                        <div class="metric-label flat">Still Offline</div>
-                        <div class="comparison-text">
-                            <span style="color: #F04438;">✗</span> Not found in data
-                        </div>
-                    </div>
-
-                    <!-- Flat Data Card 2 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #EEF0FF;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A6ACF" stroke-width="2">
-                                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge neutral" id="locationBadge">0</span>
-                        </div>
-                        <div class="metric-value flat" id="uniqueLocations">0</div>
-                        <div class="metric-label flat">Locations</div>
-                        <div class="comparison-text">
-                            <span style="color: #5A6ACF;">📍</span> Unique DCs found
-                        </div>
-                    </div>
-
-                    <!-- Flat Data Card 3 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FFFAEB;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 8v4m0 4h.01"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge warning" id="totalBadge">0</span>
-                        </div>
-                        <div class="metric-value flat" id="totalCheckedCount">0</div>
-                        <div class="metric-label flat">Total Checked</div>
-                        <div class="comparison-text">
-                            <span style="color: #F79009;">⚠</span> IPs processed
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Tool Content -->
-                <div class="tool-content-card">
-                    <div class="analyzer-header">
-                        <h1><i class="fas fa-database"></i> Offline Analyzer</h1>
-                        <p>Analisis data offline dari MinerPlus dengan filter IP per Line</p>
-                    </div>
-
-        <!-- Input & Upload Section -->
-        <div class="main-input-card">
-            <!-- Input IP Offline -->
-            <div class="card-section">
-                <div class="step-header">
-                    <span class="step-number">1</span>
-                    <h3>Masukkan IP Offline</h3>
-                </div>
-                <div class="input-group">
-                    <label for="offlineIpInput"><i class="fas fa-server"></i> Daftar IP Offline (satu per baris):</label>
-                    <textarea id="offlineIpInput" placeholder="Contoh:
+                    <div class="card-content">
+                        <!-- Input & Upload Section -->
+                        <div class="upload-grid" style="grid-template-columns: 1fr; gap: 20px;">
+                            <!-- Input IP Offline -->
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-server upload-icon" style="color: #5A6ACF;"></i>
+                                    <h4>Masukkan IP Offline</h4>
+                                </div>
+                                <p class="upload-description">Masukkan IP offline yang ingin dicek status lokasinya (satu per baris)</p>
+                                <textarea id="offlineIpInput" class="modern-select" style="min-height: 120px; font-family: monospace;" placeholder="Contoh:
 10.64.2.15
 10.69.3.106"></textarea>
-                    <small>Masukkan IP offline yang ingin dicek status lokasinya.</small>
-                </div>
-            </div>
+                            </div>
+                            
+                            <!-- Upload File Excel -->
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-database upload-icon" style="color: #8B5CF6;"></i>
+                                    <h4>Upload Data Excel</h4>
+                                </div>
+                                <p class="upload-description">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom location_id</p>
+                                
+                                <label class="file-drop-zone" for="excelFile" id="fileUploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Drop file Excel atau klik untuk browse</span>
+                                </label>
+                                <span class="file-name-display" id="excelFileName">Belum ada file dipilih</span>
+                                <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
+                            </div>
+                        </div>
+                        
+                        <!-- Loading -->
+                        <div id="loading" class="message-modern" style="display: none; text-align: center;">
+                            <i class="fas fa-spinner fa-spin"></i> Memproses data, harap tunggu...
+                        </div>
 
-            <div class="card-divider"></div>
+                        <!-- Controls & Results Summary -->
+                        <div id="controls" class="filter-section-modern" style="display: none; flex-direction: column; gap: 12px; margin-top: 16px;">
+                            <div class="stats-container" id="statsContainer" style="grid-template-columns: repeat(4, 1fr);">
+                                <div class="stat-card">
+                                    <h4>Total Input</h4>
+                                    <div class="value" id="totalCount">0</div>
+                                </div>
+                                <div class="stat-card online">
+                                    <h4>Harus Cek</h4>
+                                    <div class="value" id="harusCekCount">0</div>
+                                </div>
+                                <div class="stat-card offline">
+                                    <h4>Sudah Turun</h4>
+                                    <div class="value" id="sudahTurunCount">0</div>
+                                </div>
+                                <div class="stat-card dead">
+                                    <h4>DHCP</h4>
+                                    <div class="value" id="dhcpCount">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-section-modern" id="lineFilterButtons" style="justify-content: center;">
+                                <button type="button" class="btn-filter" data-line="A">Line A</button>
+                                <button type="button" class="btn-filter" data-line="B">Line B</button>
+                                <button type="button" class="btn-filter" data-line="C">Line C</button>
+                                <button type="button" class="btn-filter" data-line="D">Line D</button>
+                                <button type="button" class="btn-filter" data-line="E">Line E</button>
+                                <button type="button" class="btn-filter" data-line="F">Line F</button>
+                            </div>
+                            
+                            <div class="analyzer-tabs" style="margin-top: 8px;">
+                                <button type="button" class="btn-filter active" data-tab="harus-cek" id="tabHarusCek">
+                                    <i class="fas fa-exclamation-triangle"></i> Harus Cek: <strong id="harusCekCountTab">0</strong>
+                                </button>
+                                <button type="button" class="btn-filter" data-tab="sudah-turun" id="tabSudahTurun">
+                                    <i class="fas fa-check-circle"></i> Sudah Turun: <strong id="sudahTurunCountTab">0</strong>
+                                </button>
+                                <button type="button" class="btn-filter" data-tab="dhcp" id="tabDhcp">
+                                    <i class="fas fa-question-circle"></i> DHCP: <strong id="dhcpCountTab">0</strong>
+                                </button>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 15px; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid #E7E9F3;">
+                                <div style="flex: 1; font-size: 13px; color: #565A78;">
+                                    <i class="fas fa-info-circle"></i> Export IP "Sudah Turun" dan "DHCP" ke halaman Miner vs Dashboard
+                                </div>
+                                <button id="exportToValidatorBtn" class="btn-modern btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> Export IP
+                                </button>
+                            </div>
+                        </div>
 
-            <!-- Upload File Excel -->
-            <div class="card-section">
-                <div class="step-header">
-                    <span class="step-number">2</span>
-                    <h3>Upload Data Excel</h3>
-                </div>
-                <p class="upload-desc">Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom <code>location_id</code>.</p>
-                <div class="compact-upload-area" id="fileUploadArea">
-                    <div class="upload-content">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <div class="upload-text">
-                            <span class="upload-title">Klik untuk memilih file atau seret ke sini</span>
-                            <span class="upload-subtitle">Format .xls, .xlsx</span>
+                        <!-- Output Tab Panel -->
+                        <div id="output" class="table-container" style="margin-top: 16px;">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <h4>Belum Ada Data</h4>
+                                <p>Masukkan IP Offline di Langkah 1 dan Upload berkas Excel di Langkah 2 untuk memulai analisis.</p>
+                            </div>
                         </div>
                     </div>
-                    <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
                 </div>
             </div>
-        </div>
-
-        <!-- Loading -->
-        <div id="loading" class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>Memproses data, harap tunggu...</p>
-        </div>
-
-        <!-- Controls & Results Summary -->
-        <div id="controls" class="controls-panel">
-            <div class="results-header-container">
-                <div class="results-top-row">
-                    <div class="total-input-badge">
-                        <i class="fas fa-list"></i> Total Input: <strong id="totalCount">0</strong> IP
-                    </div>
-                    <div class="line-filter-buttons" id="lineFilterButtons">
-                        <button type="button" class="line-filter-btn" data-line="A">Line A</button>
-                        <button type="button" class="line-filter-btn" data-line="B">Line B</button>
-                        <button type="button" class="line-filter-btn" data-line="C">Line C</button>
-                        <button type="button" class="line-filter-btn" data-line="D">Line D</button>
-                        <button type="button" class="line-filter-btn" data-line="E">Line E</button>
-                        <button type="button" class="line-filter-btn" data-line="F">Line F</button>
-                    </div>
-                </div>
-                <div class="analyzer-tabs">
-                    <button type="button" class="tab-btn active" data-tab="harus-cek" id="tabHarusCek">
-                        <i class="fas fa-exclamation-triangle"></i> Harus Cek: <strong id="harusCekCount">0</strong>
-                    </button>
-                    <button type="button" class="tab-btn" data-tab="sudah-turun" id="tabSudahTurun">
-                        <i class="fas fa-check-circle"></i> Sudah Turun: <strong id="sudahTurunCount">0</strong>
-                    </button>
-                    <button type="button" class="tab-btn" data-tab="dhcp" id="tabDhcp">
-                        <i class="fas fa-question-circle"></i> DHCP: <strong id="dhcpCount">0</strong>
-                    </button>
-                </div>
-            </div>
-            <div class="export-action" style="display: flex; align-items: center; gap: 15px; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
-                <div class="marquee-container">
-                    <p class="marquee-text">
-                        Jika kamu terlalu sibuk untuk membuka tab baru, silahkan pake button ini untuk otomatis mengexport ip yang sudah turun dan dhcp ke halaman miner vs dashboard
-                    </p>
-                </div>
-                <button id="exportToValidatorBtn"
-                    style="padding: 8px 16px; border: none; border-radius: 4px; background: #007bff; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; flex-shrink: 0;">
-                    <i class="fas fa-external-link-alt"></i> Export IP
-                </button>
-            </div>
-        </div>
-
-        <!-- Output Tab Panel -->
-        <div id="output" class="output-container tab-panel-container">
-            <div class="empty-state">
-                <i class="fas fa-database"></i>
-                <h3>Belum Ada Data</h3>
-                <p>Masukkan IP Offline di Langkah 1 dan Upload berkas Excel di Langkah 2 untuk memulai analisis.</p>
-            </div>
-        </div>
-                </div><!-- End tool-content-card -->
-            </div><!-- End dashboard-body -->
         </main>
     </div>
 
