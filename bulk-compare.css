@@ -16,6 +16,15 @@
     vertical-align: middle;
 }
 
+/* DC Toolbar */
+.dc-toolbar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
 /* Modern search input */
 .modern-search-input {
     flex: 1;
