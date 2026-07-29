@@ -1,5 +1,1 @@
-(data-matcher.css and data-matcher.html are source files, no build artifacts, dependencies, or temp files in the changes)
-
-```gitignore
-
-```
+(data-matcher.css is a source file, so no need to add anything to .gitignore)
