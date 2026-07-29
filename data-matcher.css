@@ -526,7 +526,7 @@
 }
 
 /* Status Badges in Table */
-.status-badge-modern {
+.status-badge {
     display: inline-flex;
     padding: 4px 10px;
     border-radius: 12px;
@@ -547,6 +547,11 @@
 .status-dead {
     background: #FEF3F2;
     color: #B42318;
+}
+
+.status-not-found {
+    background: #f8d7da;
+    color: #721c24;
 }
 
 /* Pagination */
@@ -632,6 +637,28 @@
 .empty-state p {
     font-size: 14px;
     color: #8C8FA8;
+}
+
+/* Priority Row Styling */
+.modern-table tbody tr.priority {
+    background: #FFFBEB;
+}
+
+.modern-table tbody tr.priority:hover {
+    background: #FEF3C7;
+}
+
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #FEF3F2;
+    color: #B42318;
+    margin-left: 8px;
 }
 
 /* Responsive */
