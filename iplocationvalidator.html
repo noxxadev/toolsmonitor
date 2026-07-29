@@ -103,160 +103,135 @@
             
             <!-- Page Content -->
             <div class="dashboard-body">
-                <!-- Metric Cards Row -->
-                <div class="metrics-grid">
-                    <!-- Gradient Hero Card -->
-                    <div class="metric-card gradient-hero" style="background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);">
-                        <button class="card-view-more">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
-                        <div class="metric-icon-wrapper">
-                            <div class="metric-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                <!-- Upload Section as Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Miner Vs Dashboard</h3>
+                            <p class="card-subtitle">Validasi kesesuaian IP MinerPlus dengan Location ID Machine List</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="upload-grid">
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-file-excel upload-icon" style="color: #217346;"></i>
+                                    <h4>MinerPlus Data</h4>
+                                </div>
+                                <p class="upload-description">Upload file Excel MinerPlus (device list)</p>
+                                
+                                <label class="file-drop-zone" for="minerPlusFile">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Drop file Excel atau klik untuk browse</span>
+                                </label>
+                                <span class="file-name-display" id="minerPlusName">Belum ada file dipilih</span>
+                                <input type="file" id="minerPlusFile" accept=".xls,.xlsx" />
+                            </div>
+                            
+                            <div class="upload-box-modern">
+                                <div class="upload-header">
+                                    <i class="fas fa-database upload-icon" style="color: #8B5CF6;"></i>
+                                    <h4>Machine List Data</h4>
+                                </div>
+                                <p class="upload-description">Upload file Excel Machine List</p>
+                                
+                                <label class="file-drop-zone" for="machineListFile">
+                                    <i class="fas fa-file-upload"></i>
+                                    <span>Drop file Excel atau klik untuk browse</span>
+                                </label>
+                                <span class="file-name-display" id="machineListName">Belum ada file dipilih</span>
+                                <input type="file" id="machineListFile" accept=".xls,.xlsx" />
                             </div>
                         </div>
-                        <div class="metric-value" id="validCount">0</div>
-                        <div class="metric-label">Valid IPs</div>
-                        <div class="metric-trend">
-                            <span id="validPercent">0% match rate</span>
-                        </div>
-                    </div>
-
-                    <!-- Flat Data Card 1 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FEF3F2;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2">
-                                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                        
+                        <div class="info-box-modern">
+                            <div class="info-content">
+                                <strong>VALIDASI DATA MINERPLUS & MACHINE LIST</strong>
+                                <ul style="margin-top: 5px; margin-left: 20px;">
+                                    <li>Upload file MinerPlus (device list)</li>
+                                    <li>Upload file Machine List (machinelist)</li>
+                                    <li>Masukkan IP yang belum di delete</li>
+                                </ul>
                             </div>
-                            <span class="trend-badge error" id="invalidBadge">0</span>
-                        </div>
-                        <div class="metric-value flat" id="invalidCount">0</div>
-                        <div class="metric-label flat">Invalid IPs</div>
-                        <div class="comparison-text">
-                            <span style="color: #F04438;">✗</span> Location mismatch
-                        </div>
-                    </div>
-
-                    <!-- Flat Data Card 2 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #EEF0FF;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A6ACF" stroke-width="2">
-                                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
+                            <div class="info-status">
+                                <strong>Master Data Status:</strong> <span id="masterDataStatus">Loading...</span>
                             </div>
-                            <span class="trend-badge neutral" id="totalBadge">0</span>
                         </div>
-                        <div class="metric-value flat" id="totalCount">0</div>
-                        <div class="metric-label flat">Total Checked</div>
-                        <div class="comparison-text">
-                            <span style="color: #5A6ACF;">📊</span> All processed IPs
-                        </div>
-                    </div>
-
-                    <!-- Flat Data Card 3 -->
-                    <div class="metric-card flat-data">
-                        <div class="flat-card-header">
-                            <div class="flat-card-icon" style="background: #FFFAEB;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 8v4m0 4h.01"/>
-                                </svg>
-                            </div>
-                            <span class="trend-badge warning" id="pendingBadge">⏳</span>
-                        </div>
-                        <div class="metric-value flat" id="pendingCount">0</div>
-                        <div class="metric-label flat">Pending</div>
-                        <div class="comparison-text">
-                            <span style="color: #F79009;">⚠</span> Awaiting validation
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Tool Content -->
-                <div class="tool-content-card">
-                    <div class="analyzer-header">
-                        <h1><i class="fas fa-check-circle"></i> Miner Vs Dashboard</h1>
-                        <p>Validasi kesesuaian IP MinerPlus dengan Location ID Machine List</p>
-                    </div>
-
-        <div class="form-container">
-            <div class="info">
-                <div>
-                    <strong>VALIDASI DATA MINERPLUS & MACHINE LIST</strong>
-                    <ul style="margin-top: 5px; margin-left: 20px;">
-                        <li>Upload file MinerPlus (device list)</li>
-                        <li>Upload file Machine List (machinelist)</li>
-                        <li>Masukkan IP yang belum di delete</li>
-                    </ul>
-                </div>
-                <div style="margin-top: 10px;">
-                    <strong>Master Data Status:</strong> <span id="masterDataStatus">Loading...</span>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <!-- Upload MinerPlus -->
-                <div class="form-group">
-                    <label for="minerPlusFile"><i class="fas fa-file-excel" style="color: #217346;"></i> Upload File
-                        MinerPlus:</label>
-                    <input type="file" id="minerPlusFile" accept=".xls,.xlsx" />
-                    <div id="minerPlusFileError" class="error"></div>
-                </div>
-
-                <!-- Upload Machine List -->
-                <div class="form-group">
-                    <label for="machineListFile"><i class="fas fa-file-excel" style="color: #217346;"></i> Upload File
-                        Machine List:</label>
-                    <input type="file" id="machineListFile" accept=".xls,.xlsx" />
-                    <div id="machineListFileError" class="error"></div>
-                </div>
-            </div>
-
-            <!-- Textbox IP Manual -->
-            <div class="form-group">
-                <label for="manualIpInput"><i class="fas fa-keyboard"></i> Masukkan IP yang belum di delete (satu
-                    per baris):</label>
-                <textarea id="manualIpInput" placeholder="Contoh:
+                        
+                        <!-- Textbox IP Manual -->
+                        <div class="manual-input-section">
+                            <label for="manualIpInput"><i class="fas fa-keyboard"></i> Masukkan IP yang belum di delete (satu per baris):</label>
+                            <textarea id="manualIpInput" placeholder="Contoh:
 10.1.1.25
 10.1.1.26"></textarea>
-                <div id="manualIpError" class="error"></div>
+                            <div id="manualIpError" class="error"></div>
+                        </div>
+                        
+                        <div class="action-buttons-row">
+                            <button id="validateBtn" class="btn-modern btn-primary" disabled>
+                                <i class="fas fa-check-double"></i> Validasi
+                            </button>
+                            <button id="resetBtn" class="btn-modern btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Section as Card -->
+                <div class="content-card" id="resultsSection" style="display: none;">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Hasil Validasi</h3>
+                            <p class="card-subtitle">Kesimpulan validasi IP dan Location ID</p>
+                        </div>
+                        <div class="filter-section-modern" id="filterSection">
+                            <button id="filterAll" class="filter-btn-modern active">Semua</button>
+                            <button id="filterTrue" class="filter-btn-modern">TRUE</button>
+                            <button id="filterFalse" class="filter-btn-modern">FALSE</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div id="result" class="message-modern"></div>
+                        <div id="warning" class="message-modern warning-message" style="display: none;"></div>
+                        
+                        <!-- Summary Section -->
+                        <div id="summarySection" class="stats-container" style="display: none;">
+                            <div class="stat-item">
+                                <div class="stat-value" id="validCount">0</div>
+                                <div class="stat-label">Valid IPs</div>
+                                <div class="stat-trend" id="validPercent">0% match rate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value error" id="invalidCount">0</div>
+                                <div class="stat-label">Invalid IPs</div>
+                                <div class="stat-trend">Location mismatch</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value neutral" id="totalCount">0</div>
+                                <div class="stat-label">Total Checked</div>
+                                <div class="stat-trend">All processed IPs</div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Results -->
+                        <div id="outputSection" class="table-container" style="display: none;">
+                            <div class="detailed-results">
+                                <h4 class="table-title">Detail Selisih Data:</h4>
+                                <div id="detailedResults"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="noData" class="empty-state" style="display: none;">
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h4>Tidak ada hasil</h4>
+                            <p>Silakan upload data dan mulai validasi untuk melihat hasil</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <button id="validateBtn"><i class="fas fa-check-double"></i> Validasi</button>
-
-            <div id="result" class="result" style="display: none;"></div>
-
-            <div id="warning" class="warning" style="display: none;"></div>
-
-            <div id="outputSection" style="display: none;">
-                <h3>Filter Output:</h3>
-                <div class="filter-controls">
-                    <button id="filterAll" class="filter-btn active">Semua</button>
-                    <button id="filterTrue" class="filter-btn">TRUE</button>
-                    <button id="filterFalse" class="filter-btn">FALSE</button>
-                </div>
-
-                <div class="summary">
-                    <strong>Ringkasan Validasi:</strong>
-                    <span id="summaryText"></span>
-                </div>
-
-                <div class="detailed-results">
-                    <h3 style="padding: 1.25rem 1.5rem 0.5rem; margin-bottom: 0;">Detail Selisih Data:</h3>
-                    <div id="detailedResults" style="padding: 1.25rem 1.5rem;"></div>
-                </div>
-            </div>
-        </div>
-                </div><!-- End tool-content-card -->
-            </div><!-- End dashboard-body -->
         </main>
     </div>
 
