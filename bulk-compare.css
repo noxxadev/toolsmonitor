@@ -1,84 +1,46 @@
-/* ===== BULK COMPARE - style tambahan (tidak mengubah data-matcher.css) ===== */
+/* ===== BULK COMPARE - Modern UI Style (sama dengan data-matcher.css) ===== */
 
-/* Step container */
-.bulk-step {
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
-    padding: 1.75rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow);
-}
-
-.bulk-step-header {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-card);
-}
-
-.bulk-step-header h3 {
-    color: var(--text-bright);
-    font-size: 1.15rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-}
-
-.bulk-step-header h3 i {
-    color: var(--phosphor);
-    filter: drop-shadow(0 0 6px var(--phosphor-glow));
-}
-
-.step-number {
+/* Step badge */
+.step-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: var(--phosphor);
-    color: var(--dark);
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #5A6ACF 0%, #8B5CF6 100%);
+    color: white;
     font-weight: 700;
     border-radius: 50%;
-    font-size: 0.95rem;
-    box-shadow: 0 0 12px var(--phosphor-glow);
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
 }
 
-/* DC Toolbar (search + group buttons) */
-.dc-toolbar {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.dc-search {
+/* Modern search input */
+.modern-search-input {
     flex: 1;
     min-width: 200px;
     padding: 0.65rem 0.9rem;
-    background: rgba(6, 10, 6, 0.8);
-    color: var(--text-main);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
-    font-family: inherit;
+    background: #F9FAFB;
+    color: #101828;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
-    transition: var(--transition);
+    transition: all 0.2s ease;
 }
 
-.dc-search::placeholder {
-    color: var(--text-muted);
+.modern-search-input::placeholder {
+    color: #667085;
 }
 
-.dc-search:focus {
+.modern-search-input:focus {
     outline: none;
-    border-color: var(--phosphor);
-    box-shadow: 0 0 12px var(--phosphor-glow);
+    border-color: #5A6ACF;
+    box-shadow: 0 0 0 3px rgba(90, 106, 197, 0.1);
 }
 
+/* DC Group buttons */
 .dc-group-buttons {
     display: flex;
     gap: 0.4rem;
@@ -87,40 +49,27 @@
 }
 
 .group-label {
-    color: var(--text-muted);
+    color: #667085;
     font-size: 0.85rem;
     margin-right: 0.3rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
-.btn-group {
+.btn-sm {
     padding: 0.45rem 0.9rem;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-main);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: inherit;
     font-size: 0.85rem;
-    font-weight: 500;
 }
 
-.btn-group:hover {
-    background: rgba(0, 255, 157, 0.1);
-    border-color: var(--phosphor);
-    color: var(--phosphor);
+.btn-clear {
+    color: #F04438 !important;
+    border-color: rgba(240, 68, 56, 0.3) !important;
 }
 
-.btn-group.btn-clear {
-    color: var(--danger);
-    border-color: rgba(255, 59, 59, 0.3);
-}
-
-.btn-group.btn-clear:hover {
-    background: rgba(255, 59, 59, 0.1);
-    border-color: var(--danger);
+.btn-clear:hover {
+    background: rgba(240, 68, 56, 0.1) !important;
+    border-color: #F04438 !important;
 }
 
 /* DC Checkbox Grid */
@@ -131,9 +80,9 @@
     max-height: 320px;
     overflow-y: auto;
     padding: 0.5rem;
-    background: rgba(6, 10, 6, 0.5);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
+    background: #F9FAFB;
+    border: 1px solid #E4E7EC;
+    border-radius: 8px;
     margin-bottom: 1.25rem;
 }
 
@@ -142,16 +91,17 @@
 }
 
 .dc-checkbox-grid::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: #F2F4F7;
+    border-radius: 4px;
 }
 
 .dc-checkbox-grid::-webkit-scrollbar-thumb {
-    background: var(--border-card);
+    background: #D0D5DD;
     border-radius: 4px;
 }
 
 .dc-checkbox-grid::-webkit-scrollbar-thumb:hover {
-    background: var(--phosphor-dim);
+    background: #98A2B3;
 }
 
 .dc-checkbox-item {
@@ -159,24 +109,24 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 0.6rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
+    background: white;
+    border: 1px solid #E4E7EC;
+    border-radius: 8px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     font-size: 0.88rem;
     user-select: none;
 }
 
 .dc-checkbox-item:hover {
-    background: rgba(0, 255, 157, 0.06);
-    border-color: var(--phosphor);
+    background: #F2F4F7;
+    border-color: #5A6ACF;
 }
 
 .dc-checkbox-item.checked {
-    background: rgba(0, 255, 157, 0.12);
-    border-color: var(--phosphor);
-    box-shadow: 0 0 8px rgba(0, 255, 157, 0.15);
+    background: rgba(90, 106, 197, 0.1);
+    border-color: #5A6ACF;
+    box-shadow: 0 0 0 2px rgba(90, 106, 197, 0.1);
 }
 
 .dc-checkbox-item input[type="checkbox"] {
@@ -184,18 +134,18 @@
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
-    border: 1.5px solid var(--border-card);
-    border-radius: 2px;
+    border: 1.5px solid #D0D5DD;
+    border-radius: 4px;
     cursor: pointer;
     position: relative;
     background: transparent;
     flex-shrink: 0;
-    transition: var(--transition);
+    transition: all 0.2s ease;
 }
 
 .dc-checkbox-item input[type="checkbox"]:checked {
-    background: var(--phosphor);
-    border-color: var(--phosphor);
+    background: #5A6ACF;
+    border-color: #5A6ACF;
 }
 
 .dc-checkbox-item input[type="checkbox"]:checked::after {
@@ -204,22 +154,22 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--dark);
+    color: white;
     font-size: 12px;
     font-weight: 700;
 }
 
 .dc-checkbox-item .dc-label {
     flex: 1;
-    color: var(--text-main);
+    color: #101828;
 }
 
 .dc-checkbox-item.checked .dc-label {
-    color: var(--phosphor);
+    color: #5A6ACF;
     font-weight: 600;
 }
 
-/* DC Action Row (count + download button) */
+/* DC Action Row */
 .dc-action-row {
     display: flex;
     justify-content: space-between;
@@ -229,20 +179,16 @@
 }
 
 .dc-selected-count {
-    color: var(--text-muted);
+    color: #667085;
     font-size: 0.95rem;
 }
 
 .dc-selected-count strong {
-    color: var(--phosphor);
+    color: #5A6ACF;
     font-size: 1.1rem;
 }
 
-.bulk-download-btn {
-    margin-bottom: 0;
-}
-
-/* DC Download Progress */
+/* DC Progress */
 .dc-progress-wrapper {
     margin-top: 1.25rem;
     display: flex;
@@ -253,35 +199,34 @@
 .dc-progress-bar {
     flex: 1;
     height: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
+    background: #F2F4F7;
+    border: 1px solid #E4E7EC;
+    border-radius: 8px;
     overflow: hidden;
 }
 
 .dc-progress-fill {
     height: 100%;
     width: 0%;
-    background: var(--phosphor);
-    box-shadow: 0 0 10px var(--phosphor-glow);
+    background: linear-gradient(90deg, #5A6ACF 0%, #8B5CF6 100%);
     transition: width 0.3s ease;
 }
 
 .dc-progress-text {
-    color: var(--phosphor);
+    color: #5A6ACF;
     font-size: 0.9rem;
     font-weight: 600;
     min-width: 70px;
     text-align: right;
 }
 
-/* Per-DC Summary (added: bulk breakdown) */
+/* Per-DC Summary */
 .dc-summary-section {
     margin-bottom: 2.5rem;
 }
 
 .dc-summary-title {
-    color: var(--text-bright);
+    color: #101828;
     font-size: 1rem;
     margin-bottom: 1rem;
     display: flex;
@@ -289,10 +234,11 @@
     gap: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 700;
 }
 
 .dc-summary-title i {
-    color: var(--phosphor);
+    color: #5A6ACF;
 }
 
 .dc-summary-grid {
@@ -302,25 +248,21 @@
 }
 
 .dc-summary-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: var(--border-radius);
+    background: white;
+    border: 1px solid #E4E7EC;
+    border-radius: 8px;
     padding: 0.85rem 1rem;
-    transition: var(--transition);
+    transition: all 0.2s ease;
 }
 
 .dc-summary-card:hover {
-    background: rgba(0, 255, 157, 0.04);
+    background: #F9FAFB;
     transform: translateY(-2px);
-    box-shadow: 0 0 15px var(--phosphor-glow);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/*.dc-summary-card.has-issue {
-    border-left-color: var(--danger);
-}*/
-
 .dc-summary-card .dc-name {
-    color: var(--text-bright);
+    color: #101828;
     font-weight: 600;
     font-size: 0.95rem;
     margin-bottom: 0.3rem;
@@ -330,7 +272,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: #667085;
     line-height: 1.7;
 }
 
@@ -338,9 +280,9 @@
     font-weight: 600;
 }
 
-.dc-summary-card .ok { color: var(--phosphor); }
-.dc-summary-card .warn { color: var(--amber); }
-.dc-summary-card .bad { color: var(--danger); }
+.dc-summary-card .ok { color: #12B76A; }
+.dc-summary-card .warn { color: #F79009; }
+.dc-summary-card .bad { color: #F04438; }
 
 /* Responsive */
 @media (max-width: 768px) {
