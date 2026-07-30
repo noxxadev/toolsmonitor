@@ -78,6 +78,11 @@
                     <h1 class="page-title">Miner Vs Dashboard</h1>
                 </div>
                 <div class="navbar-right">
+                    <!-- Master Data Status Indicator -->
+                    <div id="masterDataIndicator" class="status-indicator" style="display: none;" title="Master Data Loaded">
+                        <span class="indicator-dot"></span>
+                    </div>
+                    
                     <div class="search-bar">
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" class="search-input" placeholder="Cari...">
@@ -154,9 +159,6 @@
                                     <li>Upload file Machine List (machinelist)</li>
                                     <li>Masukkan IP yang belum di delete</li>
                                 </ul>
-                            </div>
-                            <div class="info-status">
-                                <strong>Master Data Status:</strong> <span id="masterDataStatus">Loading...</span>
                             </div>
                         </div>
                         

@@ -29,9 +29,11 @@ function checkValidateButton() {
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof window.masterData !== 'undefined') {
         masterData = window.masterData;
-        document.getElementById('masterDataStatus').textContent = 
-            `Loaded ${Object.keys(masterData).length} records`;
-        document.getElementById('masterDataStatus').style.color = 'green';
+        // Show green glowing indicator in navbar
+        const indicator = document.getElementById('masterDataIndicator');
+        if (indicator) {
+            indicator.style.display = 'flex';
+        }
         
         // Build reverse mapping (location_id -> IP)
         locationToIpMap = {};
@@ -41,9 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     } else {
-        document.getElementById('masterDataStatus').textContent = 
-            'Error: Master data not found';
-        document.getElementById('masterDataStatus').style.color = 'red';
+        // Show red indicator or hide if error
+        const indicator = document.getElementById('masterDataIndicator');
+        if (indicator) {
+            indicator.style.display = 'flex';
+            const dot = indicator.querySelector('.indicator-dot');
+            if (dot) {
+                dot.style.background = '#ef4444';
+                dot.style.animation = 'none';
+            }
+        }
     }
     
     setupFilterButtons();
