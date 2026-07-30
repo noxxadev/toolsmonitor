@@ -442,7 +442,22 @@ document.getElementById('validateBtn').addEventListener('click', function() {
     resultDiv.className = `result ${hasDiscrepancy ? 'false' : 'true'}`;
     resultDiv.style.display = 'block';
     
+    // Tampilkan section hasil
+    document.getElementById('resultsSection').style.display = 'block';
     document.getElementById('outputSection').style.display = 'block';
+    document.getElementById('summarySection').style.display = 'flex';
+    
+    // Update summary stats
+    const trueCount = validationResults.filter(r => r.isValid).length;
+    const falseCount = validationResults.filter(r => !r.isValid).length;
+    const totalCount = validationResults.length;
+    const matchRate = totalCount > 0 ? Math.round((trueCount / totalCount) * 100) : 0;
+    
+    document.getElementById('validCount').textContent = trueCount;
+    document.getElementById('invalidCount').textContent = falseCount;
+    document.getElementById('totalCount').textContent = totalCount;
+    document.getElementById('validPercent').textContent = `${matchRate}% match rate`;
+    
     displayResults();
 });
 
