@@ -269,23 +269,33 @@
 .stats-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding: 8px;
 }
 
 .stat-item {
-    background: #F9FAFC;
+    background: linear-gradient(135deg, #F9FAFC 0%, #F6F7FB 100%);
     border: 1px solid #E7E9F3;
-    border-radius: 10px;
-    padding: 14px 16px;
+    border-radius: 12px;
+    padding: 20px 24px;
     text-align: center;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(20, 21, 43, 0.04);
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(20, 21, 43, 0.08);
+    border-color: #5A6ACF;
 }
 
 .stat-value {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
     color: #14152B;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
 }
 
 .stat-value.error {
@@ -297,15 +307,23 @@
 }
 
 .stat-label {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: #565A78;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .stat-trend {
-    font-size: 11px;
+    font-size: 12px;
     color: #8C8FA8;
+    font-weight: 500;
+    background: #F6F7FB;
+    padding: 4px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 4px;
 }
 
 /* Message Modern */
