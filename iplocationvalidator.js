@@ -8,6 +8,24 @@ let currentFilter = 'all';
 let currentSortColumn = null;
 let currentSortDirection = 'asc';
 
+// Function to check if validate button should be enabled
+function checkValidateButton() {
+    const validateBtn = document.getElementById('validateBtn');
+    const manualIpInput = document.getElementById('manualIpInput').value.trim();
+    
+    // Enable button only if:
+    // 1. MinerPlus file uploaded (has IPs)
+    // 2. Machine List file uploaded (has entries)
+    // 3. Manual IP input has at least one IP
+    if (minerPlusIPs.length > 0 && 
+        machineListEntries.length > 0 && 
+        manualIpInput !== '') {
+        validateBtn.disabled = false;
+    } else {
+        validateBtn.disabled = true;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof window.masterData !== 'undefined') {
         masterData = window.masterData;
@@ -29,6 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     setupFilterButtons();
+    
+    // Add event listener for manual IP input to check button state
+    const manualIpInput = document.getElementById('manualIpInput');
+    if (manualIpInput) {
+        manualIpInput.addEventListener('input', checkValidateButton);
+    }
 
     // Check for exported IPs from offline-analyzer
     const exportedIPs = sessionStorage.getItem('exportedOfflineIPs');
@@ -36,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const manualInput = document.getElementById('manualIpInput');
         if (manualInput) {
             manualInput.value = exportedIPs;
+            // Trigger check after setting value
+            setTimeout(checkValidateButton, 100);
         }
         // Clean up so it doesn't persist
         sessionStorage.removeItem('exportedOfflineIPs');
@@ -81,6 +107,9 @@ document.getElementById('minerPlusFile').addEventListener('change', function(e) 
     const file = e.target.files[0];
     if (!file) return;
     
+    // Update file name display
+    document.getElementById('minerPlusName').textContent = file.name;
+    
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -94,14 +123,17 @@ document.getElementById('minerPlusFile').addEventListener('change', function(e) 
             if (ips === null) {
                 showFileFeedback('minerPlusFileError', 'Gagal: Kolom "IP" tidak ditemukan di file MinerPlus!', false);
                 minerPlusIPs = [];
+                checkValidateButton();
                 return;
             }
             
             minerPlusIPs = ips;
             showFileFeedback('minerPlusFileError', `Sukses: Berhasil memuat ${minerPlusIPs.length} IP dari file MinerPlus.`, true);
+            checkValidateButton();
         } catch (err) {
             showFileFeedback('minerPlusFileError', 'Error membaca file: ' + err.message, false);
             minerPlusIPs = [];
+            checkValidateButton();
         }
     };
     reader.readAsArrayBuffer(file);
@@ -111,6 +143,9 @@ document.getElementById('minerPlusFile').addEventListener('change', function(e) 
 document.getElementById('machineListFile').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
+    
+    // Update file name display
+    document.getElementById('machineListName').textContent = file.name;
     
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -126,6 +161,7 @@ document.getElementById('machineListFile').addEventListener('change', function(e
                 showFileFeedback('machineListFileError', 'Gagal: Kolom "location_id" tidak ditemukan di file Machine List!', false);
                 machineListEntries = [];
                 machineListIPs = [];
+                checkValidateButton();
                 return;
             }
             
@@ -141,10 +177,12 @@ document.getElementById('machineListFile').addEventListener('change', function(e
             });
             
             showFileFeedback('machineListFileError', `Sukses: Berhasil memuat ${machineListEntries.length} lokasi dari file Machine List.`, true);
+            checkValidateButton();
         } catch (err) {
             showFileFeedback('machineListFileError', 'Error membaca file: ' + err.message, false);
             machineListEntries = [];
             machineListIPs = [];
+            checkValidateButton();
         }
     };
     reader.readAsArrayBuffer(file);
@@ -406,4 +444,35 @@ document.getElementById('validateBtn').addEventListener('click', function() {
     
     document.getElementById('outputSection').style.display = 'block';
     displayResults();
+});
+
+// Add reset button functionality to reset the form and disable validate button
+document.getElementById('resetBtn').addEventListener('click', function() {
+    // Reset file inputs
+    document.getElementById('minerPlusFile').value = '';
+    document.getElementById('machineListFile').value = '';
+    
+    // Reset file name displays
+    document.getElementById('minerPlusName').textContent = 'Belum ada file dipilih';
+    document.getElementById('machineListName').textContent = 'Belum ada file dipilih';
+    
+    // Reset manual IP input
+    document.getElementById('manualIpInput').value = '';
+    
+    // Clear error messages
+    showFileFeedback('minerPlusFileError', '', false);
+    showFileFeedback('machineListFileError', '', false);
+    
+    // Reset data arrays
+    minerPlusIPs = [];
+    machineListEntries = [];
+    machineListIPs = [];
+    validationResults = [];
+    
+    // Hide results section
+    document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('detailedResults').innerHTML = '';
+    
+    // Disable validate button
+    checkValidateButton();
 });
