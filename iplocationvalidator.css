@@ -115,6 +115,13 @@
     color: #8C8FA8;
 }
 
+.file-error-message {
+    display: block;
+    font-size: 11px;
+    margin-top: 4px;
+    min-height: 16px;
+}
+
 /* Info Box Modern */
 .info-box-modern {
     background: #F9FAFC;
