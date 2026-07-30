@@ -1,51 +1,92 @@
-# Compiled and build artifacts
-*.pyc
+# Examples
+.ipynb_checkpoints/
 __pycache__/
+
+# Dependencies
+node_modules/
+vendor/bundle
+.PATH/lib
+.PATH/obj
+
+# Logs
+*.log
+
+# Environment specific
+.env
+.env.local
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
+
+# Backup files
+*~
+*.bak
+*.swp
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# IDE
+.vscode/
+.idea/
+
+# Distribution / packaging
+.dist/
+.build/
+.deps/
+
+# Testing
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Compiled and build artifacts
 *.o
 *.obj
-*.class
 *.exe
 *.dll
 *.so
 *.a
-*.out
-dist/
-build/
-target/
-
-# Dependencies
-.venv/
-venv/
-node_modules/
-.mypy_cache/
-.pytest_cache/
-.coverage
-coverage/
-htmlcov/
-.gradle/
-julia-*/
-zig*/
-
-# Logs and temp files
-*.log
-*.tmp
-*.swp
-*.swo
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# System files
-.DS_Store
-Thumbs.db
+*.class
+*.jar
+*.war
+*.ear
+*.tar.gz
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
 
 # Compressed files
 *.zip
@@ -70,3 +111,78 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+
+# Temp files
+*.tmp
+*.temp
+*.lock
+
+# Output files
+*.out
+*.bin
+*.app
+*.dylib
+*.dll
+*.so
+*.obj
+*.class
+*.pyc
+*.pyo
+*.pyd
+*.jar
+*.war
+*.ear
+*.tar.gz
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Build systems
+build/
+dist/
+target/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+coverage/
+htmlcov/
+.coverage
+.mypy_cache/
+.pytest_cache/
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.env
+.env.local
+.env.*
+.vscode/
+.idea/
+*.egg-info/
+.eggs/
