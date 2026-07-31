@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMasterData();
     setupTabEventListeners();
     setupLineFilterListeners();
+    setupExportButtonListener();
 });
 
 // Setup event listeners for tabs
@@ -408,23 +409,25 @@ function copyIpList(data, button) {
     });
 }
 
-// Export to Validator functionality
-document.getElementById('exportToValidatorBtn')?.addEventListener('click', function() {
-    // Retrieve IPs from Sudah Turun and DHCP
-    const sudahTurunIPs = currentData['sudah-turun'] ? currentData['sudah-turun'].map(item => item.ip) : [];
-    const dhcpIPs = currentData['dhcp'] ? currentData['dhcp'].map(item => item.ip) : [];
-    
-    // Combine IPs
-    const allExportIPs = [...sudahTurunIPs, ...dhcpIPs];
-    
-    if (allExportIPs.length === 0) {
-        alert('Tidak ada IP "Sudah Turun" atau "DHCP" untuk diexport.');
-        return;
-    }
-    
-    // Save to sessionStorage
-    sessionStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
-    
-    // Open Validator in new tab
-    window.open('iplocationvalidator.html', '_blank');
-});
+// Setup export button listener
+function setupExportButtonListener() {
+    document.getElementById('exportToValidatorBtn')?.addEventListener('click', function() {
+        // Retrieve IPs from Sudah Turun and DHCP
+        const sudahTurunIPs = currentData['sudah-turun'] ? currentData['sudah-turun'].map(item => item.ip) : [];
+        const dhcpIPs = currentData['dhcp'] ? currentData['dhcp'].map(item => item.ip) : [];
+        
+        // Combine IPs
+        const allExportIPs = [...sudahTurunIPs, ...dhcpIPs];
+        
+        if (allExportIPs.length === 0) {
+            alert('Tidak ada IP "Sudah Turun" atau "DHCP" untuk diexport.');
+            return;
+        }
+        
+        // Save to sessionStorage
+        sessionStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
+        
+        // Open Validator in new tab
+        window.open('iplocationvalidator.html', '_blank');
+    });
+}
