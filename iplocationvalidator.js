@@ -62,6 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
             manualInput.value = exportedIPs;
             // Trigger check after setting value
             setTimeout(checkValidateButton, 100);
+            
+            // Auto-validate if both files are already uploaded
+            setTimeout(() => {
+                const validateBtn = document.getElementById('validateBtn');
+                if (validateBtn && !validateBtn.disabled) {
+                    validateBtn.click();
+                }
+            }, 300);
         }
         // Clean up so it doesn't persist
         sessionStorage.removeItem('exportedOfflineIPs');
