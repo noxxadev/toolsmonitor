@@ -411,6 +411,48 @@ function copyIpList(data, button) {
 
 // Setup export button listener
 function setupExportButtonListener() {
+    // Copy IP button - copies only IPs (no location) from currently displayed data with filter applied
+    document.getElementById('copyIpBtn')?.addEventListener('click', function() {
+        // Get data from current tab
+        let data = currentData[currentTab] || [];
+        
+        // Apply line filter
+        const filteredData = filterBySelectedLines(data);
+        
+        if (filteredData.length === 0) {
+            alert('Tidak ada IP untuk di-copy.');
+            return;
+        }
+        
+        // Extract only IPs, one per line
+        const ipList = filteredData.map(item => item.ip).join('\n');
+        
+        navigator.clipboard.writeText(ipList).then(() => {
+            const btn = document.getElementById('copyIpBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }).catch(err => {
+            console.error('Clipboard copy failed:', err);
+            // Fallback for copy
+            const textArea = document.createElement('textarea');
+            textArea.value = ipList;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            const btn = document.getElementById('copyIpBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        });
+    });
+    
+    // Export to Validator button
     document.getElementById('exportToValidatorBtn')?.addEventListener('click', function() {
         // Retrieve IPs from Sudah Turun and DHCP
         const sudahTurunIPs = currentData['sudah-turun'] ? currentData['sudah-turun'].map(item => item.ip) : [];
