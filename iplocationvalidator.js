@@ -54,8 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
         manualIpInput.addEventListener('input', checkValidateButton);
     }
 
-    // Check for exported IPs from offline-analyzer
-    const exportedIPs = sessionStorage.getItem('exportedOfflineIPs');
+    // Check for exported IPs from offline-analyzer (check localStorage first, then sessionStorage)
+    let exportedIPs = localStorage.getItem('exportedOfflineIPs');
+    if (!exportedIPs) {
+        exportedIPs = sessionStorage.getItem('exportedOfflineIPs');
+    }
+    
     if (exportedIPs) {
         const manualInput = document.getElementById('manualIpInput');
         if (manualInput) {
@@ -72,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }
         // Clean up so it doesn't persist
+        localStorage.removeItem('exportedOfflineIPs');
         sessionStorage.removeItem('exportedOfflineIPs');
     }
 });

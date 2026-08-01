@@ -424,7 +424,10 @@ function setupExportButtonListener() {
             return;
         }
         
-        // Save to sessionStorage
+        // Save to localStorage (more reliable for cross-tab communication)
+        localStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
+        
+        // Also save to sessionStorage as backup
         sessionStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
         
         // Open Validator in new tab
