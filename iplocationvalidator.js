@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const manualInput = document.getElementById('manualIpInput');
                 if (manualInput) {
                     manualInput.value = exportedIPs;
-                    // Trigger check after setting value
-                    setTimeout(checkValidateButton, 100);
+                    // Trigger input event to update button state
+                    manualInput.dispatchEvent(new Event('input'));
                     
                     // Auto-validate if both files are already uploaded
                     setTimeout(() => {
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (validateBtn && !validateBtn.disabled) {
                             validateBtn.click();
                         }
-                    }, 300);
+                    }, 500);
                 }
                 // Clean up so it doesn't persist
                 localStorage.removeItem('exportedOfflineIPs');
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const manualInput = document.getElementById('manualIpInput');
                 if (manualInput) {
                     manualInput.value = exportedData;
-                    setTimeout(checkValidateButton, 100);
+                    manualInput.dispatchEvent(new Event('input'));
                 }
                 localStorage.removeItem('exportedOfflineIPs');
                 sessionStorage.removeItem('exportedOfflineIPs');
@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const manualInput = document.getElementById('manualIpInput');
             if (manualInput) {
                 manualInput.value = exportedIPs;
-                setTimeout(checkValidateButton, 100);
+                // Trigger input event to update button state
+                manualInput.dispatchEvent(new Event('input'));
                 
                 // Auto-validate if both files are already uploaded
                 setTimeout(() => {
@@ -115,8 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (validateBtn && !validateBtn.disabled) {
                         validateBtn.click();
                     }
-                }, 300);
+                }, 500);
             }
+            // Clean up storage after receiving via postMessage
+            localStorage.removeItem('exportedOfflineIPs');
+            sessionStorage.removeItem('exportedOfflineIPs');
         }
     });
 });
