@@ -466,13 +466,27 @@ function setupExportButtonListener() {
             return;
         }
         
-        // Save to localStorage (more reliable for cross-tab communication)
-        localStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
+        // Save to localStorage with timestamp for validation
+        const exportData = {
+            ips: allExportIPs.join('\n'),
+            timestamp: Date.now()
+        };
+        localStorage.setItem('exportedOfflineIPs', JSON.stringify(exportData));
         
         // Also save to sessionStorage as backup
-        sessionStorage.setItem('exportedOfflineIPs', allExportIPs.join('\n'));
+        sessionStorage.setItem('exportedOfflineIPs', JSON.stringify(exportData));
         
         // Open Validator in new tab
-        window.open('iplocationvalidator.html', '_blank');
+        const validatorWindow = window.open('iplocationvalidator.html', '_blank');
+        
+        // Send message to the new tab if it's already loaded
+        setTimeout(() => {
+            if (validatorWindow) {
+                validatorWindow.postMessage({
+                    type: 'exportedOfflineIPs',
+                    data: exportData
+                }, window.location.origin);
+            }
+        }, 500);
     });
 }
