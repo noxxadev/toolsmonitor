@@ -55,30 +55,70 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Check for exported IPs from offline-analyzer (check localStorage first, then sessionStorage)
-    let exportedIPs = localStorage.getItem('exportedOfflineIPs');
-    if (!exportedIPs) {
-        exportedIPs = sessionStorage.getItem('exportedOfflineIPs');
+    function loadExportedIPs() {
+        let exportedData = localStorage.getItem('exportedOfflineIPs');
+        if (!exportedData) {
+            exportedData = sessionStorage.getItem('exportedOfflineIPs');
+        }
+        
+        if (exportedData) {
+            try {
+                // Try to parse as JSON (new format)
+                const parsed = JSON.parse(exportedData);
+                const exportedIPs = parsed.ips;
+                
+                const manualInput = document.getElementById('manualIpInput');
+                if (manualInput) {
+                    manualInput.value = exportedIPs;
+                    // Trigger check after setting value
+                    setTimeout(checkValidateButton, 100);
+                    
+                    // Auto-validate if both files are already uploaded
+                    setTimeout(() => {
+                        const validateBtn = document.getElementById('validateBtn');
+                        if (validateBtn && !validateBtn.disabled) {
+                            validateBtn.click();
+                        }
+                    }, 300);
+                }
+                // Clean up so it doesn't persist
+                localStorage.removeItem('exportedOfflineIPs');
+                sessionStorage.removeItem('exportedOfflineIPs');
+            } catch (e) {
+                // Fallback to old format (plain text)
+                const manualInput = document.getElementById('manualIpInput');
+                if (manualInput) {
+                    manualInput.value = exportedData;
+                    setTimeout(checkValidateButton, 100);
+                }
+                localStorage.removeItem('exportedOfflineIPs');
+                sessionStorage.removeItem('exportedOfflineIPs');
+            }
+        }
     }
     
-    if (exportedIPs) {
-        const manualInput = document.getElementById('manualIpInput');
-        if (manualInput) {
-            manualInput.value = exportedIPs;
-            // Trigger check after setting value
-            setTimeout(checkValidateButton, 100);
-            
-            // Auto-validate if both files are already uploaded
-            setTimeout(() => {
-                const validateBtn = document.getElementById('validateBtn');
-                if (validateBtn && !validateBtn.disabled) {
-                    validateBtn.click();
-                }
-            }, 300);
+    // Load exported IPs on page load
+    loadExportedIPs();
+    
+    // Listen for postMessage from offline-analyzer
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'exportedOfflineIPs') {
+            const exportedIPs = event.data.data.ips;
+            const manualInput = document.getElementById('manualIpInput');
+            if (manualInput) {
+                manualInput.value = exportedIPs;
+                setTimeout(checkValidateButton, 100);
+                
+                // Auto-validate if both files are already uploaded
+                setTimeout(() => {
+                    const validateBtn = document.getElementById('validateBtn');
+                    if (validateBtn && !validateBtn.disabled) {
+                        validateBtn.click();
+                    }
+                }, 300);
+            }
         }
-        // Clean up so it doesn't persist
-        localStorage.removeItem('exportedOfflineIPs');
-        sessionStorage.removeItem('exportedOfflineIPs');
-    }
+    });
 });
 
 // Helper to show file upload success or error messages
