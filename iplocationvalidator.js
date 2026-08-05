@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Trigger input event to update button state
                     manualInput.dispatchEvent(new Event('input'));
                     
+                    // Show info message about needing files
+                    showFileFeedback('minerPlusFileError', 'ℹ️ IP telah diimport dari Offline Analyzer. Silakan upload file MinerPlus dan Machine List untuk melanjutkan validasi.', true);
+                    
                     // Auto-validate if both files are already uploaded
                     setTimeout(() => {
                         const validateBtn = document.getElementById('validateBtn');
@@ -109,6 +112,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 manualInput.value = exportedIPs;
                 // Trigger input event to update button state
                 manualInput.dispatchEvent(new Event('input'));
+                
+                // Show info message about needing files
+                showFileFeedback('minerPlusFileError', 'ℹ️ IP telah diimport dari Offline Analyzer. Silakan upload file MinerPlus dan Machine List untuk melanjutkan validasi.', true);
                 
                 // Auto-validate if both files are already uploaded
                 setTimeout(() => {
