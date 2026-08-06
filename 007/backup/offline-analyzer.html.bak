@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Analyzer - DataAnalyzer</title>
+    <link rel="stylesheet" href="offline-analyzer.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="analyzer-nav">
+        <div class="nav-container">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Kembali ke Beranda
+            </a>
+            <div class="nav-title">
+                <i class="fas fa-database"></i>
+                <span>Offline Analyzer</span>
+            </div>
+            <div class="nav-actions">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Beranda
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="analyzer-container">
+        <div class="analyzer-header">
+            <h1><i class="fas fa-database"></i> Offline Analyzer</h1>
+            <p>Analisis data offline dari MinerPlus dengan filter IP per Line</p>
+        </div>
+
+        <!-- Step 1: Input IP Offline -->
+        <div class="step-section">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h3>Masukkan IP Offline</h3>
+            </div>
+            <div class="filter-ip-section">
+                <div class="input-group">
+                    <label for="offlineIpInput"><i class="fas fa-server"></i> Daftar IP Offline (satu per
+                        baris):</label>
+                    <textarea id="offlineIpInput" placeholder="Contoh:
+10.64.2.15
+10.69.3.106"></textarea>
+                    <small>Masukkan IP offline yang ingin dicek status lokasinya.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Upload File Excel -->
+        <div class="step-section">
+            <div class="step-header">
+                <span class="step-number">2</span>
+                <h3>Upload Data Excel</h3>
+            </div>
+            <div class="step-content">
+                <p>Upload file Excel dari MinerPlus/Dashboard yang berisikan kolom <code>location_id</code>.</p>
+            </div>
+            <div class="compact-upload-area" id="fileUploadArea">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="upload-text">
+                        <span class="upload-title">Klik untuk memilih file atau seret ke sini</span>
+                        <span class="upload-subtitle">Format .xls, .xlsx</span>
+                    </div>
+                </div>
+                <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx" />
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Memproses data, harap tunggu...</p>
+        </div>
+
+        <!-- Controls & Results Summary -->
+        <div id="controls" class="controls-panel">
+            <div class="results-header-container">
+                <div class="total-input-badge">
+                    <i class="fas fa-list"></i> Total Input: <strong id="totalCount">0</strong> IP
+                </div>
+                <div class="analyzer-tabs">
+                    <button type="button" class="tab-btn active" data-tab="harus-cek" id="tabHarusCek">
+                        <i class="fas fa-exclamation-triangle"></i> Harus Cek: <strong id="harusCekCount">0</strong>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="sudah-turun" id="tabSudahTurun">
+                        <i class="fas fa-check-circle"></i> Sudah Turun: <strong id="sudahTurunCount">0</strong>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="dhcp" id="tabDhcp">
+                        <i class="fas fa-question-circle"></i> DHCP: <strong id="dhcpCount">0</strong>
+                    </button>
+                </div>
+            </div>
+            <div class="export-action" style="display: flex; align-items: center; gap: 15px; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <div class="marquee-container">
+                    <p class="marquee-text">
+                        Jika kamu terlalu sibuk untuk membuka tab baru, silahkan pake button ini untuk otomatis mengexport ip yang sudah turun dan dhcp ke halaman miner vs dashboard
+                    </p>
+                </div>
+                <button id="exportToValidatorBtn"
+                    style="padding: 8px 16px; border: none; border-radius: 4px; background: #007bff; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; flex-shrink: 0;">
+                    <i class="fas fa-external-link-alt"></i> Export IP
+                </button>
+            </div>
+        </div>
+
+        <!-- Output Tab Panel -->
+        <div id="output" class="output-container tab-panel-container">
+            <div class="empty-state">
+                <i class="fas fa-database"></i>
+                <h3>Belum Ada Data</h3>
+                <p>Masukkan IP Offline di Langkah 1 dan Upload berkas Excel di Langkah 2 untuk memulai analisis.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- XLSX Library, Master Data, & Script -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
+    <script src="master-data.js"></script>
+    <script src="offline-analyzer-script.js"></script>
+</body>
+
+</html>
