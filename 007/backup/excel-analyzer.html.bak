@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Excel Analyzer - DataAnalyzer</title>
+  <link rel="stylesheet" href="excel-analyzer.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="analyzer-nav">
+    <div class="nav-container">
+      <a href="index.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Kembali ke Beranda
+      </a>
+      <div class="nav-title">
+        <i class="fas fa-file-excel"></i>
+        <span>Excel Analyzer</span>
+      </div>
+      <div class="nav-actions">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          Beranda
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="analyzer-container">
+    <div class="analyzer-header">
+      <h1><i class="fas fa-file-excel"></i> Excel Analyzer</h1>
+      <p>Unggah file Excel untuk memeriksa kesesuaian antara Logical Zone dan Sub-account</p>
+    </div>
+
+    <div class="file-upload-section">
+      <div class="file-upload-area" id="fileUploadArea">
+        <div class="upload-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h3>Seret file Excel ke sini atau klik untuk memilih</h3>
+        <p>Format yang didukung: .xls, .xlsx</p>
+        <span class="upload-btn">Pilih File Excel</span>
+        <input type="file" id="excelFile" class="file-input" accept=".xls,.xlsx"/>
+      </div>
+    </div>
+
+    <div id="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Memproses file, harap tunggu...</p>
+    </div>
+
+    <div id="controls" class="controls-panel">
+      <div class="filter-section">
+        <div class="filter-group">
+          <label for="filter"><i class="fas fa-filter"></i> Filter Hasil:</label>
+          <select id="filter">
+            <option value="all">📊 Semua Data</option>
+            <option value="true">✅ Hanya TRUE</option>
+            <option value="false">❌ Hanya FALSE</option>
+          </select>
+        </div>
+
+        <div class="checkbox-group" id="checkbox-controls">
+          <div class="checkbox-item">
+            <input type="checkbox" id="hideOnline" />
+            <label for="hideOnline"><i class="fas fa-eye-slash"></i> Sembunyikan 'online'</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="hideOffline" />
+            <label for="hideOffline"><i class="fas fa-eye-slash"></i> Sembunyikan 'offline'</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="counts" class="results-count"></div>
+    </div>
+
+    <div id="output" class="output-container"></div>
+  </div>
+
+  <!-- XLSX Library -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
+
+  <script src="analyzer-script.js"></script>
+</body>
+</html>
