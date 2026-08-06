@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
             masterDataStatusEl.textContent = 
                 `Loaded ${Object.keys(masterData).length} records`;
             masterDataStatusEl.style.color = 'green';
+        } else {
+            console.log('masterDataStatus element not found in HTML, skipping status update');
         }
         
         // Build reverse mapping (location_id -> IP)
@@ -117,6 +119,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load exported IPs on page load
     loadExportedIPs();
+    
+    // Setup validate and reset buttons
+    setupValidateButton();
+    setupResetButton();
     
     // Listen for postMessage from offline-analyzer
     window.addEventListener('message', function(event) {
@@ -556,6 +562,8 @@ function setupValidateButton() {
     document.getElementById('validPercent').textContent = `${matchRate}% match rate`;
     
     displayResults();
+        });
+    }
 }
 
 // Add reset button functionality to reset the form and disable validate button
@@ -600,7 +608,3 @@ function setupResetButton() {
         });
     }
 }
-
-// Call setup functions inside DOMContentLoaded
-setupValidateButton();
-setupResetButton();
