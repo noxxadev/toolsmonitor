@@ -11,7 +11,15 @@ let currentSortDirection = 'asc';
 // Function to check if validate button should be enabled
 function checkValidateButton() {
     const validateBtn = document.getElementById('validateBtn');
-    const manualIpInput = document.getElementById('manualIpInput').value.trim();
+    const manualIpInput = document.getElementById('manualIpInput');
+    
+    // Safety check: if elements don't exist yet, exit early
+    if (!validateBtn || !manualIpInput) {
+        console.log('checkValidateButton: Required elements not found, skipping');
+        return;
+    }
+    
+    const manualIpValue = manualIpInput.value.trim();
     
     // Enable button only if:
     // 1. MinerPlus file uploaded (has IPs)
@@ -19,7 +27,7 @@ function checkValidateButton() {
     // 3. Manual IP input has at least one IP
     const hasMinerPlus = minerPlusIPs.length > 0;
     const hasMachineList = machineListEntries.length > 0;
-    const hasManualIp = manualIpInput !== '';
+    const hasManualIp = manualIpValue !== '';
     
     console.log('checkValidateButton:', { hasMinerPlus, hasMachineList, hasManualIp, minerPlusCount: minerPlusIPs.length, machineListCount: machineListEntries.length });
     
@@ -33,17 +41,9 @@ function checkValidateButton() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if masterDataStatus element exists before using it
-    const masterDataStatusEl = document.getElementById('masterDataStatus');
+    // Master data status element removed as it doesn't exist in HTML
     if (typeof window.masterData !== 'undefined') {
         masterData = window.masterData;
-        if (masterDataStatusEl) {
-            masterDataStatusEl.textContent = 
-                `Loaded ${Object.keys(masterData).length} records`;
-            masterDataStatusEl.style.color = 'green';
-        } else {
-            console.log('masterDataStatus element not found in HTML, skipping status update');
-        }
         
         // Build reverse mapping (location_id -> IP)
         locationToIpMap = {};
@@ -52,12 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 locationToIpMap[loc.trim()] = ip.trim();
             }
         });
+        console.log('Master data loaded:', Object.keys(masterData).length, 'records');
     } else {
-        if (masterDataStatusEl) {
-            masterDataStatusEl.textContent = 
-                'Error: Master data not found';
-            masterDataStatusEl.style.color = 'red';
-        }
+        console.warn('Master data not found on window object');
     }
     
     setupFilterButtons();
