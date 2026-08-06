@@ -17,21 +17,31 @@ function checkValidateButton() {
     // 1. MinerPlus file uploaded (has IPs)
     // 2. Machine List file uploaded (has entries)
     // 3. Manual IP input has at least one IP
-    if (minerPlusIPs.length > 0 && 
-        machineListEntries.length > 0 && 
-        manualIpInput !== '') {
+    const hasMinerPlus = minerPlusIPs.length > 0;
+    const hasMachineList = machineListEntries.length > 0;
+    const hasManualIp = manualIpInput !== '';
+    
+    console.log('checkValidateButton:', { hasMinerPlus, hasMachineList, hasManualIp, minerPlusCount: minerPlusIPs.length, machineListCount: machineListEntries.length });
+    
+    if (hasMinerPlus && hasMachineList && hasManualIp) {
         validateBtn.disabled = false;
+        console.log('Validate button ENABLED');
     } else {
         validateBtn.disabled = true;
+        console.log('Validate button DISABLED');
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if masterDataStatus element exists before using it
+    const masterDataStatusEl = document.getElementById('masterDataStatus');
     if (typeof window.masterData !== 'undefined') {
         masterData = window.masterData;
-        document.getElementById('masterDataStatus').textContent = 
-            `Loaded ${Object.keys(masterData).length} records`;
-        document.getElementById('masterDataStatus').style.color = 'green';
+        if (masterDataStatusEl) {
+            masterDataStatusEl.textContent = 
+                `Loaded ${Object.keys(masterData).length} records`;
+            masterDataStatusEl.style.color = 'green';
+        }
         
         // Build reverse mapping (location_id -> IP)
         locationToIpMap = {};
@@ -41,9 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     } else {
-        document.getElementById('masterDataStatus').textContent = 
-            'Error: Master data not found';
-        document.getElementById('masterDataStatus').style.color = 'red';
+        if (masterDataStatusEl) {
+            masterDataStatusEl.textContent = 
+                'Error: Master data not found';
+            masterDataStatusEl.style.color = 'red';
+        }
     }
     
     setupFilterButtons();
@@ -53,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (manualIpInput) {
         manualIpInput.addEventListener('input', checkValidateButton);
     }
+
+    // Setup file input listeners inside DOMContentLoaded to ensure elements exist
+    setupFileInputs();
 
     // Check for exported IPs from offline-analyzer (check localStorage first, then sessionStorage)
     function loadExportedIPs() {
@@ -165,91 +180,106 @@ function extractColumnData(sheetData, possibleHeaders) {
         .filter(val => val !== '');
 }
 
-// Handle MinerPlus File Upload
-document.getElementById('minerPlusFile').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    // Update file name display
-    document.getElementById('minerPlusName').textContent = file.name;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+// Setup file input event listeners
+function setupFileInputs() {
+    // Handle MinerPlus File Upload
+    const minerPlusFileInput = document.getElementById('minerPlusFile');
+    if (minerPlusFileInput) {
+        minerPlusFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             
-            const ips = extractColumnData(jsonData, ['IP', 'ip_address', 'IP Address']);
-            if (ips === null) {
-                showFileFeedback('minerPlusFileError', 'Gagal: Kolom "IP" tidak ditemukan di file MinerPlus!', false);
-                minerPlusIPs = [];
-                checkValidateButton();
-                return;
+            // Update file name display
+            const minerPlusNameEl = document.getElementById('minerPlusName');
+            if (minerPlusNameEl) {
+                minerPlusNameEl.textContent = file.name;
             }
             
-            minerPlusIPs = ips;
-            showFileFeedback('minerPlusFileError', `Sukses: Berhasil memuat ${minerPlusIPs.length} IP dari file MinerPlus.`, true);
-            checkValidateButton();
-        } catch (err) {
-            showFileFeedback('minerPlusFileError', 'Error membaca file: ' + err.message, false);
-            minerPlusIPs = [];
-            checkValidateButton();
-        }
-    };
-    reader.readAsArrayBuffer(file);
-});
-
-// Handle Machine List File Upload
-document.getElementById('machineListFile').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    // Update file name display
-    document.getElementById('machineListName').textContent = file.name;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
-            
-            const locations = extractColumnData(jsonData, ['location_id', 'location id', 'location']);
-            if (locations === null) {
-                showFileFeedback('machineListFileError', 'Gagal: Kolom "location_id" tidak ditemukan di file Machine List!', false);
-                machineListEntries = [];
-                machineListIPs = [];
-                checkValidateButton();
-                return;
-            }
-            
-            machineListEntries = [];
-            machineListIPs = [];
-            
-            locations.forEach(loc => {
-                const ip = locationToIpMap[loc] || null;
-                machineListEntries.push({ locationId: loc, ip: ip });
-                if (ip) {
-                    machineListIPs.push(ip);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    const ips = extractColumnData(jsonData, ['IP', 'ip_address', 'IP Address']);
+                    if (ips === null) {
+                        showFileFeedback('minerPlusFileError', 'Gagal: Kolom "IP" tidak ditemukan di file MinerPlus!', false);
+                        minerPlusIPs = [];
+                        checkValidateButton();
+                        return;
+                    }
+                    
+                    minerPlusIPs = ips;
+                    showFileFeedback('minerPlusFileError', `Sukses: Berhasil memuat ${minerPlusIPs.length} IP dari file MinerPlus.`, true);
+                    checkValidateButton();
+                } catch (err) {
+                    showFileFeedback('minerPlusFileError', 'Error membaca file: ' + err.message, false);
+                    minerPlusIPs = [];
+                    checkValidateButton();
                 }
-            });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    
+    // Handle Machine List File Upload
+    const machineListFileInput = document.getElementById('machineListFile');
+    if (machineListFileInput) {
+        machineListFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             
-            showFileFeedback('machineListFileError', `Sukses: Berhasil memuat ${machineListEntries.length} lokasi dari file Machine List.`, true);
-            checkValidateButton();
-        } catch (err) {
-            showFileFeedback('machineListFileError', 'Error membaca file: ' + err.message, false);
-            machineListEntries = [];
-            machineListIPs = [];
-            checkValidateButton();
-        }
-    };
-    reader.readAsArrayBuffer(file);
-});
+            // Update file name display
+            const machineListNameEl = document.getElementById('machineListName');
+            if (machineListNameEl) {
+                machineListNameEl.textContent = file.name;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    const locations = extractColumnData(jsonData, ['location_id', 'location id', 'location']);
+                    if (locations === null) {
+                        showFileFeedback('machineListFileError', 'Gagal: Kolom "location_id" tidak ditemukan di file Machine List!', false);
+                        machineListEntries = [];
+                        machineListIPs = [];
+                        checkValidateButton();
+                        return;
+                    }
+                    
+                    machineListEntries = [];
+                    machineListIPs = [];
+                    
+                    locations.forEach(loc => {
+                        const ip = locationToIpMap[loc] || null;
+                        machineListEntries.push({ locationId: loc, ip: ip });
+                        if (ip) {
+                            machineListIPs.push(ip);
+                        }
+                    });
+                    
+                    showFileFeedback('machineListFileError', `Sukses: Berhasil memuat ${machineListEntries.length} lokasi dari file Machine List.`, true);
+                    checkValidateButton();
+                } catch (err) {
+                    showFileFeedback('machineListFileError', 'Error membaca file: ' + err.message, false);
+                    machineListEntries = [];
+                    machineListIPs = [];
+                    checkValidateButton();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+}
 
 function setupFilterButtons() {
     document.getElementById('filterAll').addEventListener('click', function() {
@@ -405,19 +435,23 @@ function updateSortIndicators() {
     });
 }
 
-document.getElementById('validateBtn').addEventListener('click', function() {
-    // Reset status & error messages
-    const minerPlusError = document.getElementById('minerPlusFileError');
-    const machineListError = document.getElementById('machineListFileError');
-    
-    if (minerPlusIPs.length === 0) {
-        minerPlusError.textContent = 'Silakan upload file MinerPlus terlebih dahulu!';
-        minerPlusError.style.color = '#dc3545';
-    }
-    if (machineListEntries.length === 0) {
-        machineListError.textContent = 'Silakan upload file Machine List terlebih dahulu!';
-        machineListError.style.color = '#dc3545';
-    }
+// Setup validate button listener inside DOMContentLoaded
+function setupValidateButton() {
+    const validateBtn = document.getElementById('validateBtn');
+    if (validateBtn) {
+        validateBtn.addEventListener('click', function() {
+            // Reset status & error messages
+            const minerPlusError = document.getElementById('minerPlusFileError');
+            const machineListError = document.getElementById('machineListFileError');
+            
+            if (minerPlusIPs.length === 0) {
+                minerPlusError.textContent = 'Silakan upload file MinerPlus terlebih dahulu!';
+                minerPlusError.style.color = '#dc3545';
+            }
+            if (machineListEntries.length === 0) {
+                machineListError.textContent = 'Silakan upload file Machine List terlebih dahulu!';
+                machineListError.style.color = '#dc3545';
+            }
     
     if (minerPlusIPs.length === 0 || machineListEntries.length === 0) {
         return;
@@ -522,35 +556,51 @@ document.getElementById('validateBtn').addEventListener('click', function() {
     document.getElementById('validPercent').textContent = `${matchRate}% match rate`;
     
     displayResults();
-});
+}
 
 // Add reset button functionality to reset the form and disable validate button
-document.getElementById('resetBtn').addEventListener('click', function() {
-    // Reset file inputs
-    document.getElementById('minerPlusFile').value = '';
-    document.getElementById('machineListFile').value = '';
-    
-    // Reset file name displays
-    document.getElementById('minerPlusName').textContent = 'Belum ada file dipilih';
-    document.getElementById('machineListName').textContent = 'Belum ada file dipilih';
-    
-    // Reset manual IP input
-    document.getElementById('manualIpInput').value = '';
-    
-    // Clear error messages
-    showFileFeedback('minerPlusFileError', '', false);
-    showFileFeedback('machineListFileError', '', false);
-    
-    // Reset data arrays
-    minerPlusIPs = [];
-    machineListEntries = [];
-    machineListIPs = [];
-    validationResults = [];
-    
-    // Hide results section
-    document.getElementById('resultsSection').style.display = 'none';
-    document.getElementById('detailedResults').innerHTML = '';
-    
-    // Disable validate button
-    checkValidateButton();
-});
+function setupResetButton() {
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            // Reset file inputs
+            const minerPlusFileInput = document.getElementById('minerPlusFile');
+            const machineListFileInput = document.getElementById('machineListFile');
+            if (minerPlusFileInput) minerPlusFileInput.value = '';
+            if (machineListFileInput) machineListFileInput.value = '';
+            
+            // Reset file name displays
+            const minerPlusNameEl = document.getElementById('minerPlusName');
+            const machineListNameEl = document.getElementById('machineListName');
+            if (minerPlusNameEl) minerPlusNameEl.textContent = 'Belum ada file dipilih';
+            if (machineListNameEl) machineListNameEl.textContent = 'Belum ada file dipilih';
+            
+            // Reset manual IP input
+            const manualIpInput = document.getElementById('manualIpInput');
+            if (manualIpInput) manualIpInput.value = '';
+            
+            // Clear error messages
+            showFileFeedback('minerPlusFileError', '', false);
+            showFileFeedback('machineListFileError', '', false);
+            
+            // Reset data arrays
+            minerPlusIPs = [];
+            machineListEntries = [];
+            machineListIPs = [];
+            validationResults = [];
+            
+            // Hide results section
+            const resultsSection = document.getElementById('resultsSection');
+            const detailedResults = document.getElementById('detailedResults');
+            if (resultsSection) resultsSection.style.display = 'none';
+            if (detailedResults) detailedResults.innerHTML = '';
+            
+            // Disable validate button
+            checkValidateButton();
+        });
+    }
+}
+
+// Call setup functions inside DOMContentLoaded
+setupValidateButton();
+setupResetButton();
