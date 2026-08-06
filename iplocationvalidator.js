@@ -446,9 +446,9 @@ document.getElementById('validateBtn').addEventListener('click', function() {
     minerPlusIPs.forEach(ip => allUniqueIps.add(ip));
     machineListIPs.forEach(ip => allUniqueIps.add(ip));
     
-    // 1. Evaluate all valid mapped IPs
+    // 1. Evaluate all valid mapped IPs that are in the manual input
     allUniqueIps.forEach(ip => {
-        if (!manualIpSet.has(ip)) {
+        if (manualIpSet.has(ip)) {
             const inMinerPlus = minerPlusIPSet.has(ip);
             const inMachineList = machineListIPSet.has(ip);
             const isValid = inMinerPlus && inMachineList;
