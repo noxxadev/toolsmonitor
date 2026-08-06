@@ -28,7 +28,7 @@ function checkValidateButton() {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize master data if available
-    if (typeof window.masterData !== 'undefined') {
+    if (typeof window.masterData !== 'undefined' && window.masterData) {
         masterData = window.masterData;
         console.log(`Master data loaded: ${Object.keys(masterData).length} records`);
         
@@ -126,6 +126,15 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.removeItem('exportedOfflineIPs');
         }
     });
+    
+    // Setup file input handlers
+    setupFileInputs();
+    
+    // Setup reset button
+    setupResetButton();
+    
+    // Setup validate button
+    setupValidateButton();
 });
 
 // Helper to show file upload success or error messages
@@ -162,102 +171,148 @@ function extractColumnData(sheetData, possibleHeaders) {
         .filter(val => val !== '');
 }
 
-// Handle MinerPlus File Upload
-const minerPlusFileInput = document.getElementById('minerPlusFile');
-if (minerPlusFileInput) {
-    minerPlusFileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        // Update file name display
-        const minerPlusNameEl = document.getElementById('minerPlusName');
-        if (minerPlusNameEl) {
-            minerPlusNameEl.textContent = file.name;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                const ips = extractColumnData(jsonData, ['IP', 'ip_address', 'IP Address']);
-                if (ips === null) {
-                    showFileFeedback('minerPlusFileError', 'Gagal: Kolom "IP" tidak ditemukan di file MinerPlus!', false);
+// Setup file input handlers - wrapped in function to be called after DOM is ready
+function setupFileInputs() {
+    // Handle MinerPlus File Upload
+    const minerPlusFileInput = document.getElementById('minerPlusFile');
+    if (minerPlusFileInput) {
+        minerPlusFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Update file name display
+            const minerPlusNameEl = document.getElementById('minerPlusName');
+            if (minerPlusNameEl) {
+                minerPlusNameEl.textContent = file.name;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    const ips = extractColumnData(jsonData, ['IP', 'ip_address', 'IP Address']);
+                    if (ips === null) {
+                        showFileFeedback('minerPlusFileError', 'Gagal: Kolom "IP" tidak ditemukan di file MinerPlus!', false);
+                        minerPlusIPs = [];
+                        checkValidateButton();
+                        return;
+                    }
+                    
+                    minerPlusIPs = ips;
+                    showFileFeedback('minerPlusFileError', `Sukses: Berhasil memuat ${minerPlusIPs.length} IP dari file MinerPlus.`, true);
+                    checkValidateButton();
+                } catch (err) {
+                    showFileFeedback('minerPlusFileError', 'Error membaca file: ' + err.message, false);
                     minerPlusIPs = [];
                     checkValidateButton();
-                    return;
                 }
-                
-                minerPlusIPs = ips;
-                showFileFeedback('minerPlusFileError', `Sukses: Berhasil memuat ${minerPlusIPs.length} IP dari file MinerPlus.`, true);
-                checkValidateButton();
-            } catch (err) {
-                showFileFeedback('minerPlusFileError', 'Error membaca file: ' + err.message, false);
-                minerPlusIPs = [];
-                checkValidateButton();
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    });
-}
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
 
-// Handle Machine List File Upload
-const machineListFileInput = document.getElementById('machineListFile');
-if (machineListFileInput) {
-    machineListFileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        // Update file name display
-        const machineListNameEl = document.getElementById('machineListName');
-        if (machineListNameEl) {
-            machineListNameEl.textContent = file.name;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                const locations = extractColumnData(jsonData, ['location_id', 'location id', 'location']);
-                if (locations === null) {
-                    showFileFeedback('machineListFileError', 'Gagal: Kolom "location_id" tidak ditemukan di file Machine List!', false);
+    // Handle Machine List File Upload
+    const machineListFileInput = document.getElementById('machineListFile');
+    if (machineListFileInput) {
+        machineListFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Update file name display
+            const machineListNameEl = document.getElementById('machineListName');
+            if (machineListNameEl) {
+                machineListNameEl.textContent = file.name;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    const locations = extractColumnData(jsonData, ['location_id', 'location id', 'location']);
+                    if (locations === null) {
+                        showFileFeedback('machineListFileError', 'Gagal: Kolom "location_id" tidak ditemukan di file Machine List!', false);
+                        machineListEntries = [];
+                        machineListIPs = [];
+                        checkValidateButton();
+                        return;
+                    }
+                    
+                    machineListEntries = [];
+                    machineListIPs = [];
+                    
+                    locations.forEach(loc => {
+                        const ip = locationToIpMap[loc] || null;
+                        machineListEntries.push({ locationId: loc, ip: ip });
+                        if (ip) {
+                            machineListIPs.push(ip);
+                        }
+                    });
+                    
+                    showFileFeedback('machineListFileError', `Sukses: Berhasil memuat ${machineListEntries.length} lokasi dari file Machine List.`, true);
+                    checkValidateButton();
+                } catch (err) {
+                    showFileFeedback('machineListFileError', 'Error membaca file: ' + err.message, false);
                     machineListEntries = [];
                     machineListIPs = [];
                     checkValidateButton();
-                    return;
                 }
-                
-                machineListEntries = [];
-                machineListIPs = [];
-                
-                locations.forEach(loc => {
-                    const ip = locationToIpMap[loc] || null;
-                    machineListEntries.push({ locationId: loc, ip: ip });
-                    if (ip) {
-                        machineListIPs.push(ip);
-                    }
-                });
-                
-                showFileFeedback('machineListFileError', `Sukses: Berhasil memuat ${machineListEntries.length} lokasi dari file Machine List.`, true);
-                checkValidateButton();
-            } catch (err) {
-                showFileFeedback('machineListFileError', 'Error membaca file: ' + err.message, false);
-                machineListEntries = [];
-                machineListIPs = [];
-                checkValidateButton();
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+}
+
+// Setup reset button - wrapped in function to be called after DOM is ready
+function setupResetButton() {
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            // Reset file inputs
+            const minerPlusFileInput = document.getElementById('minerPlusFile');
+            const machineListFileInput = document.getElementById('machineListFile');
+            if (minerPlusFileInput) minerPlusFileInput.value = '';
+            if (machineListFileInput) machineListFileInput.value = '';
+            
+            // Reset file name displays
+            const minerPlusNameEl = document.getElementById('minerPlusName');
+            const machineListNameEl = document.getElementById('machineListName');
+            if (minerPlusNameEl) minerPlusNameEl.textContent = 'Belum ada file dipilih';
+            if (machineListNameEl) machineListNameEl.textContent = 'Belum ada file dipilih';
+            
+            // Reset manual IP input
+            const manualIpInput = document.getElementById('manualIpInput');
+            if (manualIpInput) manualIpInput.value = '';
+            
+            // Clear error messages
+            showFileFeedback('minerPlusFileError', '', false);
+            showFileFeedback('machineListFileError', '', false);
+            
+            // Reset data arrays
+            minerPlusIPs = [];
+            machineListEntries = [];
+            machineListIPs = [];
+            validationResults = [];
+            
+            // Hide results section
+            const resultsSection = document.getElementById('resultsSection');
+            const detailedResults = document.getElementById('detailedResults');
+            if (resultsSection) resultsSection.style.display = 'none';
+            if (detailedResults) detailedResults.innerHTML = '';
+            
+            // Disable validate button
+            checkValidateButton();
+        });
+    }
 }
 
 function setupFilterButtons() {
@@ -414,10 +469,11 @@ function updateSortIndicators() {
     });
 }
 
-// Add validate button event listener
-const validateBtn = document.getElementById('validateBtn');
-if (validateBtn) {
-    validateBtn.addEventListener('click', function() {
+// Add validate button event listener - wrapped in function to be called after DOM is ready
+function setupValidateButton() {
+    const validateBtn = document.getElementById('validateBtn');
+    if (validateBtn) {
+        validateBtn.addEventListener('click', function() {
         // Reset status & error messages
         const minerPlusError = document.getElementById('minerPlusFileError');
         const machineListError = document.getElementById('machineListFileError');
@@ -538,45 +594,8 @@ if (validateBtn) {
     document.getElementById('validPercent').textContent = `${matchRate}% match rate`;
     
     displayResults();
-});
-
-// Add reset button functionality to reset the form and disable validate button
-const resetBtn = document.getElementById('resetBtn');
-if (resetBtn) {
-    resetBtn.addEventListener('click', function() {
-        // Reset file inputs
-        const minerPlusFileInput = document.getElementById('minerPlusFile');
-        const machineListFileInput = document.getElementById('machineListFile');
-        if (minerPlusFileInput) minerPlusFileInput.value = '';
-        if (machineListFileInput) machineListFileInput.value = '';
-        
-        // Reset file name displays
-        const minerPlusNameEl = document.getElementById('minerPlusName');
-        const machineListNameEl = document.getElementById('machineListName');
-        if (minerPlusNameEl) minerPlusNameEl.textContent = 'Belum ada file dipilih';
-        if (machineListNameEl) machineListNameEl.textContent = 'Belum ada file dipilih';
-        
-        // Reset manual IP input
-        const manualIpInput = document.getElementById('manualIpInput');
-        if (manualIpInput) manualIpInput.value = '';
-        
-        // Clear error messages
-        showFileFeedback('minerPlusFileError', '', false);
-        showFileFeedback('machineListFileError', '', false);
-        
-        // Reset data arrays
-        minerPlusIPs = [];
-        machineListEntries = [];
-        machineListIPs = [];
-        validationResults = [];
-        
-        // Hide results section
-        const resultsSection = document.getElementById('resultsSection');
-        const detailedResults = document.getElementById('detailedResults');
-        if (resultsSection) resultsSection.style.display = 'none';
-        if (detailedResults) detailedResults.innerHTML = '';
-        
-        // Disable validate button
-        checkValidateButton();
-    });
+        });
+    }
 }
+
+// Call setupValidateButton after DOM is ready - already called in DOMContentLoaded
