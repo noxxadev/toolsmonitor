@@ -235,12 +235,22 @@ function buildPossibleWorkerFormats(locationId, storeroom, rackLetter, row, unit
     
     const storeLower = storeroom.toLowerCase();
     
-    // Prefix variations based on F2Pool naming conventions
-    const prefixes = [
-        `gbeab${storeLower}`, // e.g., gbeabe4a
-        `gbeg${storeLower}`,  // e.g., gbege4a
-        storeLower            // fallback: e4a
-    ];
+    // Determine prefix based on location_id (first segment)
+    // GBEA -> gbea + storeroom
+    // GBEG -> gbeg + storeroom
+    const firstSegment = locationId.split('.')[0].toLowerCase();
+    let prefix = '';
+    
+    if (firstSegment === 'gbea') {
+        prefix = `gbea${storeLower}`;
+    } else if (firstSegment === 'gbeg') {
+        prefix = `gbeg${storeLower}`;
+    } else {
+        // Fallback for other prefixes
+        prefix = storeLower;
+    }
+    
+    const prefixes = [prefix, storeLower];
     
     // 1. Generate 2-segment formats (e.g., gbeabe4a.1x52)
     prefixes.forEach(prefix => {
